@@ -1,0 +1,7 @@
+install.packages("ggplot2")
+install.packages("lattice")
+install.packages("shiny")
+install.packages("dplyr")
+install.packages("tidyr")
+install.packages("plotly")
+install.packages("shinydashboard")
