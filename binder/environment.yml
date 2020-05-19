@@ -1,0 +1,6 @@
+name: postgres
+channels:
+  - defaults
+dependencies:
+  - postgresql
+  - psycopg2
