@@ -7,12 +7,13 @@ source("helpers.R")
 
 library(rgeos)
 library(rworldmap)
+library(rworldxtra)
 
 
 db <- start()
 
-alt <- query(db, "select * from alt")
-jd <- query(db, "select * from biblio")
+alt <- query(db, "select * from altmetrics")
+jd <- query(db, "select * from bibliometrics")
 mend_geo <- query(db, "select * from mendeley_country")
 mend_status <- query(db, "select * from mendeley_status")
 mend_doi <- query(db, "select * from mendeley_doi")
@@ -68,7 +69,7 @@ function(input, output, session){
         include <- input$sources
         target_journal <- input$journ
 
-        summary <- setDT(alt)[, c(lapply(.SD[, c(12:29), with=FALSE], sum)), by=journal_name]
+        summary <- setDT(alt)[, c(lapply(.SD[, c(11:28), with=FALSE], sum)), by=journal_name]
         sub <- data.frame(subset(summary, journal_name == target_journal))
         flipped <- as.data.frame(t(sub))
         flipped <- setDT(flipped, keep.rownames = TRUE)[]
@@ -227,11 +228,11 @@ function(input, output, session){
                 colorscale='Portland',
                 reversescale=F
             ),
-            x = ~docs_published,
+            x = ~documents_published,
             y = ~cites,
             text = ~paste(
                     journal_name,
-                    '<br>Publications:', docs_published,
+                    '<br>Publications:', documents_published,
                     '<br>Citations:', cites,
                     '<br>Impact Factor: ', if_
             )
@@ -528,7 +529,7 @@ function(input, output, session){
     #       Testing     #
     #####################
     q = "Select bib.journal_name, bib.issn1, bib.if_, bib.sjr, bib.cites, alt.altmetric_score, alt.mendeley
-         FROM biblio as bib
+         FROM bibliometrics as bib
          INNER JOIN alt_simp as alt
             ON bib.issn1 = alt.print_issn"
     db <- start()

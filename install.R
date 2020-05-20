@@ -1,8 +1,0 @@
-install.packages("ggplot2")
-install.packages("shiny")
-install.packages("dplyr")
-install.packages("plotly")
-install.packages("shinydashboard")
-install.packages("rgeos")
-install.packages("rworldmap")
-install.packages("RPostgreSQL")

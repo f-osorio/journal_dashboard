@@ -1,0 +1,16 @@
+name: postgres-r
+channels:
+  - defaults
+dependencies:
+  - postgresql
+  - r
+  - rstudio
+  - r-irkernel
+  - r-ggplot2
+  - r-shiny
+  - r-dplyr
+  - r-plotly
+  - r-shinydashboard
+  - r-rgeos
+  - r-RPostgreSQL
+#- rworldmap

@@ -6,7 +6,7 @@ start <- function(){
     db_port <- 5432
     db_user <- "testuser"
     db_pass <- "pass"
-    conn <- dbConnect(RPostgres::Postgres(), dbname = db, host=host_db, port=db_port, user=db_user, password=db_password)
+    conn <- dbConnect(RPostgres::Postgres(), dbname = db_name, host=host, port=db_port, user=db_user, password=db_pass)
     return(conn)
 }
 
