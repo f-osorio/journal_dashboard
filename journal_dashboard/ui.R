@@ -1,6 +1,7 @@
 library(shiny)
 library(plotly)
 library(shinydashboard)
+library(shinyWidgets)
 
 header <- dashboardHeader(
     title = "Journal Metrics"
@@ -39,41 +40,44 @@ body <- dashboardBody(
                                 "Economic Journal", "American Economic Review", "Administrative Science Quarterly", "Academy of Management Review", "Academy of Management Journal"),
                     selected = "American Economic Review"
                 ),
-                checkboxGroupInput("sources",
-                    h3("Sources"),
-                    choices = list(
-                                    "Mendeley" = "mendeley", "News" = "news",
-                                    "Blog" = "blog", "Facebook" = "facebook", "Wikipedia" = "wikipedia", "Google" = "google",
-                                    "Syllabi" = "syllabi", "Twitter" = "twitter", "Policy" = "policy", "Peer Review" = "peer_review",
-                                    "Patent" = "patent", "Weibo" = "weibo", "linkedIn" = "linkedIn", "Reddit" = "reddit",
-                                    "Pinterest" = "pinterest", "F1000" = "f1000", "QA" = "qa", "Videos" = "videos"
-                    ),
-                    selected = list("twitter", "news", "blog", "facebook", "wikipedia", "google", "syllabi", "policy", "peer_review"),
-                    inline = TRUE,
-                    width = '600px'
+                pickerInput('sources', 'Sources', choices = list(
+                                        "Mendeley" = "mendeley", "News" = "news",
+                                        "Blog" = "blog", "Facebook" = "facebook", "Wikipedia" = "wikipedia", "Google" = "google",
+                                        "Syllabi" = "syllabi", "Twitter" = "twitter", "Policy" = "policy", "Peer Review" = "peer_review",
+                                        "Patent" = "patent", "Weibo" = "weibo", "linkedIn" = "linkedIn", "Reddit" = "reddit",
+                                        "Pinterest" = "pinterest", "F1000" = "f1000", "QA" = "qa", "Videos" = "videos"
+                                    ),
+                                    selected = list("news", "blog", "facebook", "wikipedia", "google", "syllabi", "policy", "peer_review"),
+                                    options = list(`actions-box` = TRUE),
+                                    multiple = T
                 ),
                 plotlyOutput('pie'),
                 br(),
                 h2('Social Media Sources'),
-                checkboxGroupInput("social_media_journals",
-                    h3("Journals"),
-                    choices = c("The Review of Economic Studies", "The Quarterly Journal of Economics", "The Academy of Management Annals", "Strategic Management Journal", "Review of Economic Studies",
+                pickerInput('social_media_journals', 'Journals', choices = c("The Review of Economic Studies", "The Quarterly Journal of Economics", "The Academy of Management Annals", "Strategic Management Journal", "Review of Economic Studies",
                                 "Quarterly Journal of Economics", "Management Science", "Journal of the European Economic Association", "Journal of the American Economic Association", "Journal of Political Economy",
                                 "Journal of Marketing Research (JMR)", "Journal of Marketing", "Journal of Labor Economics", "Journal of Health Economics", "Journal of Financial Economics",
                                 "Journal of Finance", "Journal of Economic Theory", "Journal of Econometrics", "Journal of Consumer Research", "Journal of Business Research",
                                 "Journal of Accounting Research", "Journal of Accounting & Economics", "Information Systems Research", "Games & Economic Behavior", "European Economic Review",
                                 "Economic Journal", "American Economic Review", "Administrative Science Quarterly", "Academy of Management Review", "Academy of Management Journal"),
                     selected = list("American Economic Review", "Strategic Management Journal", "The Academy of Management Annals"),
-                    inline = TRUE
+                    options = list(`actions-box` = TRUE),
+                    multiple = T
                 ),
-                checkboxGroupInput("social_media_types",
-                    h3("Social Media"),
-                    choices = c('news', 'blog', 'policy', 'twitter', 'facebook'),
-                    selected = list("news", "blog"),
-                    inline = TRUE
+
+                checkboxGroupButtons("social_media_types",
+                                     "Social Media",
+                                     choices = list('News'='news', 'Blog'='blog',
+                                                    'Policy'='policy', 'Twitter'='twitter',
+                                                    'Facebook'='facebook'),
+                                     selected = list("news", "blog"),
+                                     checkIcon = list(
+                                        yes = tags$i(class = "fa fa-check-square",
+                                        style = "color: steelblue"),
+                                     no = tags$i(class = "fa fa-square-o",
+                                        style = "color: steelblue"))
                 ),
                 plotlyOutput('social_bar_comp')
-
             )
         ),
         tabItem(tabName = "biblio",
@@ -113,24 +117,19 @@ body <- dashboardBody(
                 h2("Where?"),
                 plotlyOutput('map'),
                 br(),
-                h2("Country with Highest Menedeley Readership for Selected Journals that aren't the hightest for another journal in the selection"),
-                checkboxGroupInput("map_comp_select",
-                    h3("Journals"),
-                    choices = c("The Review of Economic Studies", "The Quarterly Journal of Economics", "The Academy of Management Annals", "Strategic Management Journal", "Review of Economic Studies",
+                pickerInput('map_comp_select', 'Mendeley Readers For Selected Journals', choices = c("The Review of Economic Studies", "The Quarterly Journal of Economics", "The Academy of Management Annals", "Strategic Management Journal", "Review of Economic Studies",
                                 "Quarterly Journal of Economics", "Management Science", "Journal of the European Economic Association", "Journal of the American Economic Association", "Journal of Political Economy",
                                 "Journal of Marketing Research (JMR)", "Journal of Marketing", "Journal of Labor Economics", "Journal of Health Economics", "Journal of Financial Economics",
                                 "Journal of Finance", "Journal of Economic Theory", "Journal of Econometrics", "Journal of Consumer Research", "Journal of Business Research",
                                 "Journal of Accounting Research", "Journal of Accounting & Economics", "Information Systems Research", "Games & Economic Behavior", "European Economic Review",
                                 "Economic Journal", "American Economic Review", "Administrative Science Quarterly", "Academy of Management Review", "Academy of Management Journal"),
-                    selected = list("American Economic Review", "The Academy of Management Annals"),
-                    inline = TRUE
+                    selected = list("American Economic Review", "Strategic Management Journal", "The Academy of Management Annals"),
+                    options = list(`actions-box` = TRUE),
+                    multiple = T
                 ),
-                plotlyOutput('map_comp'),
-                plotlyOutput('map_comp2', height="300%"),
-                tableOutput('map_query_summary'),
-                br(),
+                plotlyOutput('map_comp', height="300%"),
                 h2("Who?"),
-                plotlyOutput('status'),
+                plotlyOutput('status')
             )
         ),
         tabItem(tabName = "testing",
@@ -142,14 +141,14 @@ body <- dashboardBody(
                     choices = c("None"),
                 ),
                 plotlyOutput('spider'),
-                tableOutput('query_summary'),
                 h2('Hierarchical Data'),
                 h3('Journal Reader Status (tree map)'),
-                checkboxGroupInput("bubble_readers_status_journals",
+                checkboxGroupInput("treemap_readers_status_journals",
                     label = "Select Journals",
                     choices = c("None"),
+                    inline=TRUE
                 ),
-                plotlyOutput('bubble_readers_status')
+                plotlyOutput('treemap_readers_status')
             )
         )
     )
