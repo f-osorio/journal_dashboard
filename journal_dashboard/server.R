@@ -84,6 +84,9 @@ function(input, output, session){
                    yaxis = list(showgrid=FALSE, zeroline=FALSE, showticklabels=FALSE))
     })
 
+
+    journals = unique(alt$journal_name)
+    updateSelectInput(session, "social_media_journals", choices=journals, selected=list(journals[1], journals[2]))
     output$social_bar_comp <- renderPlotly({
         # group will be social media source
         selected_journals <- input$social_media_journals
@@ -309,7 +312,7 @@ function(input, output, session){
     ##########################
     spider_data <- merge(x=alt_simp, y=jd, by.x="print_issn", by.y="issn1")
     journal_list = unique(spider_data$journal_name.x)
-    updateCheckboxGroupInput(session, "spider_journals", choices=journal_list, selected=list(journal_list[2], journal_list[3]))
+    updatePickerInput(session, "spider_journals", choices=journal_list, selected=list(journal_list[2], journal_list[3]))
 
     output$spider <- renderPlotly({
         data <- spider_data
@@ -435,7 +438,7 @@ function(input, output, session){
 
     merged <- merge(x=mend_status, y=mend_doi, by.x="id_doi", by.y="id")
     available <- unique(merged$publisher)
-    updateCheckboxGroupInput(session,
+    updatePickerInput(session,
                                 "treemap_readers_status_journals",
                                 choices=available,
                                 selected=list(available[1], available[2]))

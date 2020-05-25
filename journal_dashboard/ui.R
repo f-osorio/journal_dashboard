@@ -12,7 +12,8 @@ sidebar <- dashboardSidebar(
         menuItem("Altmetrics", tabName = "altmetrics", icon = icon("hashtag")),
         menuItem("Bibliometrics", tabName = "biblio", icon = icon("book")),
         menuItem("Mendeley", tabName = "mendeley", icon = icon("chart-bar")),
-        menuItem("Testing", tabName = "testing", icon = icon("vial"))
+        menuItem("Testing", tabName = "testing", icon = icon("vial")),
+        menuItem("Open R-Studio", href="/rstudio", icon = icon("r-project"))
     )
 )
 
@@ -136,17 +137,18 @@ body <- dashboardBody(
             fluidRow(
                 h1("Testing"),
                 h2("Spider Chart (Impact Factor, Altmetric score, Mendeley readers, SJR, Handelsblatt ranking, citations)[logarithmic scaling]"),
-                checkboxGroupInput("spider_journals",
+                pickerInput("spider_journals",
                     label = "Select Journals",
                     choices = c("None"),
+                    multiple = T
                 ),
                 plotlyOutput('spider'),
                 h2('Hierarchical Data'),
                 h3('Journal Reader Status (tree map)'),
-                checkboxGroupInput("treemap_readers_status_journals",
+                pickerInput("treemap_readers_status_journals",
                     label = "Select Journals",
                     choices = c("None"),
-                    inline=TRUE
+                    multiple = T
                 ),
                 plotlyOutput('treemap_readers_status')
             )
