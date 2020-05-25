@@ -140,7 +140,8 @@ body <- dashboardBody(
                 pickerInput("spider_journals",
                     label = "Select Journals",
                     choices = c("None"),
-                    multiple = T
+                    multiple = T,
+                    options=list(`max-options` = 3)
                 ),
                 plotlyOutput('spider'),
                 h2('Hierarchical Data'),

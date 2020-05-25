@@ -1,4 +1,6 @@
-# Prepare the data to be used in the charts
+#############################################
+# Prepare the data to be used in the charts #
+#############################################
 alt <- read.csv('../data/cleaned_altmetrics.csv', header=TRUE, sep=';', stringsAsFactors = FALSE)
 alt_simp <- read.csv('../data/simplified_alt.csv', header=TRUE, sep=';', stringsAsFactors = FALSE)
 

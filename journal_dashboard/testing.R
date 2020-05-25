@@ -7,8 +7,9 @@ library(dplyr)
 source("load_data.R")
 
 
-spider_data <- merge(x=alt_simp, y=jd, by.x="print_issn", by.y="issn1")
+
 testing_spider_chart <- function(journals){
+    spider_data <- merge(x=alt_simp, y=jd, by.x="print_issn", by.y="issn1")
     data <- spider_data
     measures <- c('Impact Factor', 'SJR', 'Altmetric', 'Readers', 'Citations', 'Impact Factor')
     fig <- plot_ly(
@@ -51,8 +52,9 @@ testing_spider_chart <- function(journals){
     return(fig)
 }
 
-data <- merge(x=mend_status, y=mend_doi, by.x="id_doi", by.y="id")
+
 testing_treemap_reader_status <- function(selected){
+    data <- merge(x=mend_status, y=mend_doi, by.x="id_doi", by.y="id")
     keep <- c("publisher", "status", "count.x")
     data <- subset(data, select = keep)
     data <- data[data$publisher %in% selected, ]
