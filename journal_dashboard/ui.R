@@ -18,6 +18,16 @@ sidebar <- dashboardSidebar(
 )
 
 body <- dashboardBody(
+    tags$script(HTML(
+        "
+        var url = window.location.href
+        var target = document.getElementsByTagName('a')[5];
+        if (url.includes('shiny/journal_dashboard')){
+            var new_url = url.replace('shiny/journal_dashboard', 'rstudio')
+            target.getAttribute('href', new_url);
+        }
+        "
+    )),
     tabItems(
         tabItem(tabName = "altmetrics",
             fluidRow(
