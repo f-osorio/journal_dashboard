@@ -24,7 +24,7 @@ body <- dashboardBody(
         var target = document.getElementsByTagName('a')[5];
         if (url.includes('shiny/journal_dashboard')){
             var new_url = url.replace('shiny/journal_dashboard', 'rstudio')
-            target.getAttribute('href', new_url);
+            target.setAttribute('href', new_url);
         }
         "
     )),
