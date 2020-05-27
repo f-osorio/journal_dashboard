@@ -65,11 +65,11 @@ function(input, output, session){
 
     # Section Figures
     output$map <- renderPlotly({
-        mendely_map_basic()
+        mendeley_map_basic()
     })
 
     output$map_comp <- renderPlotly({
-        mendely_map_comp(input$map_comp_select)
+        mendeley_map_comp(input$map_comp_select)
     })
 
     output$status <- renderPlotly({

@@ -25,3 +25,4 @@ top_10_per_if_5_cutoff <- quantile(jd$if_5, prob=1-n/100)
 top_10_per_hindex_cutoff <- quantile(jd$h_index, prob=1-n/100)
 top_10_per_publications_cutoff <- quantile(jd$docs_published, prob=1-n/100)
 top_10_per_sjr_cutoff <- quantile(jd$sjr, prob=1-n/100)
+

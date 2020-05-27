@@ -10,7 +10,9 @@ library(rworldmap)
 source("load_data.R")
 
 
-mendely_map_basic <- function(){
+
+
+mendeley_map_basic <- function(){
     geo_sum <- mend_geo %>%
         group_by(country, code) %>%
             summarize(count=sum(count))
@@ -19,12 +21,26 @@ mendely_map_basic <- function(){
     # light grey boundaries
     l <- list(color = toRGB("grey"), width = 0.5)
 
-    # specify map projection/options
+    # fill df with missing countries, to make sure there are borders
+    # '%ni%' <- Negate('%in%')
+    # country_list <- subset(countryExData, select = c('Country', 'ISO3V10'))
+
+    # for (i in 1:length(rownames(country_list))){
+    #     code <- country_list[i, 2]
+    #     country <- country_list[i, 1]
+    #     if (code %ni% df$code){
+    #         df[nrow(df) + 1,] = c(trimws(country), code, 0)
+    #         print(country)
+    #     }
+    # }
+
     g <- list(
-        showframe = TRUE,
-        showcoastlines = FALSE,
-        projection = list(type = 'Mercator')
+        scope = 'world',
+        projection = list(type = 'Mercator'),
+        showland=T,
+        landcolor = toRGB("white")
     )
+
     fig <- plot_geo(df)
     fig <- fig %>% add_trace(
         z = ~count,
@@ -43,7 +59,7 @@ mendely_map_basic <- function(){
     return(fig)
 }
 
-mendely_map_comp <- function(selected){
+mendeley_map_comp <- function(selected){
     merged <- merge(x=mend_geo, y=mend_doi, by.x="id_doi", by.y="id")
     # Find center long/lat for countries
     wmap <- getMap(resolution="high")
@@ -81,22 +97,38 @@ mendely_map_comp <- function(selected){
             group_by(publisher, country, x, y) %>%     # create the groups
             summarise(Value = sum(count.x))
 
+    # order data by Value so smaller circles appear ontop of larger ones
+    data <- data[with(data, order(-Value)), ]
+
     g <- list(
         scope = 'world',
         projection = list(type = 'albers'),
         showland=T,
         landcolor = toRGB("white")
     )
+
     fig <- plot_geo(data, sizes = c(1, 2500) )
+
+    # scale the marker sizes, "sizeref=sizeref"
+    #sizeref <- 2.0 * max(data$Value) / (80**2)
+
     fig <- fig %>% add_markers(
-        x = ~x, y = ~y, size=~Value, color=~Value,
+        x = ~x, y = ~y, size=~Value,
         hoverinfo="text",
         hovertext=paste("Country: ", data$country,
                         "<br>Journal: ", data$publisher,
-                        "<br>Readers: ", data$Value)
+                        "<br>Readers: ", data$Value),
+        marker=list(
+            color=~Value,
+            colorscale='Heat',
+            colorbar=list(
+                title='Colorbar'
+            )
+        )
     )
     fig <- fig %>% layout(title='Most Readers for Selected Journals', geo=g, autosize=T)
 
+    #return(hide_colorbar(fig))
     return(fig)
 }
 
