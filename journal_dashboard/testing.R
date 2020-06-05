@@ -52,7 +52,8 @@ testing_spider_chart <- function(journals){
     return(fig)
 }
 
-
+# Treemaps
+# https://observablehq.com/@didoesdigital/2-june-2020-treemaps-dendrograms-sunbursts-circle-packing
 testing_treemap_reader_status <- function(selected){
     data <- merge(x=mend_status, y=mend_doi, by.x="id_doi", by.y="id")
     keep <- c("publisher", "status", "count.x")

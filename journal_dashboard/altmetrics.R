@@ -25,6 +25,7 @@ altmetrics_aggregate_barchart <- function(input){
     mean <- aggregate(altmetric_score ~ journal_name, alt, mean)
     median <- aggregate(altmetric_score ~ journal_name, alt, median)
 
+
     data <- switch(input,
         "Maximum" = max,
         "Minimum" = min,
@@ -37,16 +38,25 @@ altmetrics_aggregate_barchart <- function(input){
     # Get average for current selection
     avg <- mean(data[['altmetric_score']])
 
+    print('###################')
+    print(data)
+    sorted_data <- data[order(data$altmetric_score), ]
+
     fig <- plot_ly(data, x=~altmetric_score, y=~journal_name, orientation='h', type='bar', name="test")
     fig <- fig %>% layout(
         xaxis = list(title="Altmetric Score"),
-        yaxis = list(title="", tickfont=list(size=10), margin=list(pad=50)),
+        yaxis = list(title="Journals", tickfont=list(size=10), margin=list(pad=50),
+            categoryorder = "array",
+            categoryarray = sorted_data$journal_name),
         shapes = list(vline(avg)) # add a line to indicate average across journals
     )
 
     return(fig)
 }
 
+# Some notes on pie chartss
+# https://observablehq.com/@didoesdigital/16-may-2020-donut-charts-and-pie-charts?collection=@didoesdigital/journal-getting-started-with-data-viz-collection
+# https://www.data-to-viz.com/caveat/pie.html
 altmetrics_pie <- function(sources, journal){
     summary <- setDT(alt)[, c(lapply(.SD[, c(10:27), with=FALSE], sum)), by=journal_name]
     sub <- data.frame(subset(summary, journal_name == journal))

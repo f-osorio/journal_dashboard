@@ -58,8 +58,8 @@ body <- dashboardBody(
                                         "Patent" = "patent", "Weibo" = "weibo", "linkedIn" = "linkedIn", "Reddit" = "reddit",
                                         "Pinterest" = "pinterest", "F1000" = "f1000", "QA" = "qa", "Videos" = "videos"
                                     ),
-                                    selected = list("news", "blog", "facebook", "wikipedia", "google", "syllabi", "policy", "peer_review"),
-                                    options = list(`actions-box` = TRUE),
+                                    selected = list("news", "blog", "google","policy", "peer_review"),
+                                    options = list(`actions-box` = TRUE, `max-options` = 5),
                                     multiple = T
                 ),
                 plotlyOutput('pie'),
