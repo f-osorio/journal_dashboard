@@ -38,8 +38,6 @@ altmetrics_aggregate_barchart <- function(input){
     # Get average for current selection
     avg <- mean(data[['altmetric_score']])
 
-    print('###################')
-    print(data)
     sorted_data <- data[order(data$altmetric_score), ]
 
     fig <- plot_ly(data, x=~altmetric_score, y=~journal_name, orientation='h', type='bar', name="test")
