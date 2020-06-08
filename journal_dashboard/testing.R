@@ -3,6 +3,10 @@ library(shinydashboard)
 library(data.table)
 library(plotly)
 library(dplyr)
+library(ggplot2)
+
+library(rgeos)
+library(rworldmap)
 
 source("load_data.R")
 

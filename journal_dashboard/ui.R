@@ -161,7 +161,8 @@ body <- dashboardBody(
                     choices = c("None"),
                     multiple = T
                 ),
-                plotlyOutput('treemap_readers_status')
+                plotlyOutput('treemap_readers_status'),
+                br()
             )
         )
     )

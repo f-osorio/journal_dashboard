@@ -21,24 +21,14 @@ mendeley_map_basic <- function(){
     # light grey boundaries
     l <- list(color = toRGB("grey"), width = 0.5)
 
-    # fill df with missing countries, to make sure there are borders
-    # '%ni%' <- Negate('%in%')
-    # country_list <- subset(countryExData, select = c('Country', 'ISO3V10'))
-
-    # for (i in 1:length(rownames(country_list))){
-    #     code <- country_list[i, 2]
-    #     country <- country_list[i, 1]
-    #     if (code %ni% df$code){
-    #         df[nrow(df) + 1,] = c(trimws(country), code, 0)
-    #         print(country)
-    #     }
-    # }
-
     g <- list(
         scope = 'world',
         projection = list(type = 'Mercator'),
         showland=T,
-        landcolor = toRGB("white")
+        landcolor = toRGB("white"),
+        countrycolor = "#c5c5c5",
+        coastlinecolor = toRGB("grey90"),
+        showcountries = T
     )
 
     fig <- plot_geo(df)
@@ -104,7 +94,10 @@ mendeley_map_comp <- function(selected){
         scope = 'world',
         projection = list(type = 'albers'),
         showland=T,
-        landcolor = toRGB("white")
+        landcolor = toRGB("white"),
+        countrycolor = "#c5c5c5",
+        coastlinecolor = toRGB("grey90"),
+        showcountries = T
     )
 
     fig <- plot_geo(data, sizes = c(1, 2500) )
