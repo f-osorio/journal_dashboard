@@ -95,3 +95,26 @@ testing_treemap_reader_status <- function(selected){
 
     return(fig)
 }
+
+
+testing_journal_comp_chart <- function(journal_1, journal_2, categories){
+    data <- merge(x=alt_simp, y=jd, by.x="print_issn", by.y="issn1", all.y=TRUE)
+    data[is.na(data)] <- 0
+    print(colnames(data))
+    print(head(data))
+
+    keep <- c('journal_name.y', categories)
+    data <- subset(data, select = keep)
+    data <- setNames(data.frame(t(data)), data[,1])
+
+    setDT(data, keep.rownames = "Sources")[]
+    #data = as.data.frame(data[-1,])
+
+    #fig <- plot_ly(data, type='bar')
+    #for(i in 2:ncol(data)){
+    #    fig <- add_trace(fig, x = ~Sources, y = data[,i], name = colnames(data)[i])
+    #}
+    #fig <- fig %>% layout(yaxis = list(title = 'Count'), barmode = 'group')
+
+    #return(fig)
+}

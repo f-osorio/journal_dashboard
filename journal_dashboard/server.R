@@ -88,6 +88,10 @@ function(input, output, session){
     available <- unique(merged$publisher)
     updatePickerInput(session, "treemap_readers_status_journals", choices=available, selected=list(available[1], available[2]))
 
+    comp_data <- merge(x=alt_simp, y=jd, by.x="print_issn", by.y="issn1", all.y=TRUE)
+    avialable_journals = unique(comp_data$journal_name.y)
+    updatePickerInput(session, "journal_comp_1", choices=avialable_journals, selected=list(avialable_journals[1]))
+    updatePickerInput(session, "journal_comp_2", choices=avialable_journals, selected=list(avialable_journals[2]))
 
     # Section Figures
     output$spider <- renderPlotly({
@@ -96,6 +100,10 @@ function(input, output, session){
 
     output$treemap_readers_status <- renderPlotly({
         testing_treemap_reader_status(input$treemap_readers_status_journals)
+    })
+
+    output$journal_comp_chart <- renderPlotly({
+        testing_journal_comp_chart(input$journal_1, input$journal_2, input$categories)
     })
 
 }

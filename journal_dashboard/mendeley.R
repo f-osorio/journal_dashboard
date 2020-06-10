@@ -40,7 +40,7 @@ mendeley_map_basic <- function(){
         locations = ~code,
         marker = list(line = l)
     )
-    fig <- fig %>% colorbar(title = 'Downloads?')
+    fig <- fig %>% colorbar(title = 'Saves')
     fig <- fig %>% layout(
         title = 'Mendeley Distribution',
         geo = g

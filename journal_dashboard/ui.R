@@ -162,7 +162,28 @@ body <- dashboardBody(
                     multiple = T
                 ),
                 plotlyOutput('treemap_readers_status'),
-                br()
+                br(),
+                h2("Compare Journals"),
+                pickerInput('journal_comp_1',
+                            label = "Journal 1",
+                            choices = c("None")
+                ),
+                pickerInput('journal_comp_2',
+                            label = "Journal 2",
+                            choices = c("None")
+                ),
+                pickerInput('categories',
+                            label = "",
+                            choices = list('Altmetric Score'='altmetrics_score', 'Blog'='blog',
+                                           'Policy'='policy', 'Twitter'='twitter',
+                                           'Facebook'='facebook', 'Impact Factor'='if_',
+                                           '5 Year IF'='if_5','H-Index'='h_index',
+                                           'Publications'='docs_published','Citations'='cites',
+                                           'Journal Quality'='jourqual', 'News'='news'),
+                            selected = list("cites", "blog", "if_"),
+                            multiple = T
+                ),
+                plotlyOutput('journal_comp_chart'),
             )
         )
     )
