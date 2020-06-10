@@ -174,16 +174,19 @@ body <- dashboardBody(
                 ),
                 pickerInput('categories',
                             label = "",
-                            choices = list('Altmetric Score'='altmetrics_score', 'Blog'='blog',
+                            choices = list('Altmetric Score'='altmetric_score', 'Blog'='blog',
                                            'Policy'='policy', 'Twitter'='twitter',
                                            'Facebook'='facebook', 'Impact Factor'='if_',
                                            '5 Year IF'='if_5','H-Index'='h_index',
                                            'Publications'='docs_published','Citations'='cites',
                                            'Journal Quality'='jourqual', 'News'='news'),
                             selected = list("cites", "blog", "if_"),
+                            options = list(`actions-box` = TRUE),
                             multiple = T
                 ),
                 plotlyOutput('journal_comp_chart'),
+                br(),
+                plotlyOutput('journal_comp_lollipop')
             )
         )
     )
