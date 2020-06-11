@@ -68,8 +68,10 @@ testing_spider_chart <- function(journals, type){
 
      if (type == 'Totals'){
          scale_type = "log"
+         title = "Totals"
      } else {
          scale_type = ""
+         title = "Percentiles"
      }
 
     fig <- fig %>%
@@ -79,7 +81,8 @@ testing_spider_chart <- function(journals, type){
                 visible = T,
                 type=scale_type
             )
-        )
+        ),
+        title=title
     )
 
     return(fig)

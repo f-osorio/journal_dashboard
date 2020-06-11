@@ -42,6 +42,7 @@ function(input, output, session){
     # Selection Updates
     journal_list = sort(unique(jd$journal_name))[-1]
     updateSelectInput(session, "journ_summary", choices=journal_list, selected=journal_list[1])
+    updatePickerInput(session, "pub_cites_pointer", choices=journal_list)
 
     # Section Figures
     output$journ_summary <- renderUI({
@@ -49,7 +50,7 @@ function(input, output, session){
     })
 
     output$pubVcite <- renderPlotly({
-        bibliometrics_published_v_cited()
+        bibliometrics_published_v_cited(input$pub_cites_pointer)
     })
 
     output$hIndexGroup <- renderPlotly({

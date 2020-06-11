@@ -103,6 +103,11 @@ body <- dashboardBody(
                 ),
                 htmlOutput('journ_summary'),
                 h2("Documents Published vs. Total Citations"),
+                pickerInput('pub_cites_pointer', 'Select Journals to Highlight',
+                            choices = c("None"),
+                    options = list(`actions-box` = TRUE, `max-options` = 1),
+                    multiple = T
+                ),
                 plotlyOutput('pubVcite'),
 
                 h2("H-Index &"),
@@ -159,10 +164,7 @@ body <- dashboardBody(
                     choices = c("Totals", "Percentiles"),
                     status = "primary"
                 ),
-                h2("Spider Chart (total values)[logarithmic scaling]"),
                 plotlyOutput('spider'),
-                h2("Spider Chart (percentiles)"),
-                plotlyOutput('spider_percentile'),
                 h2('Hierarchical Data'),
                 h3('Journal Reader Status (tree map)'),
                 pickerInput("treemap_readers_status_journals",
