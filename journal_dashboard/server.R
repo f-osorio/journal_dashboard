@@ -96,7 +96,7 @@ function(input, output, session){
 
     # Section Figures
     output$spider <- renderPlotly({
-        testing_spider_chart(input$spider_journals)
+        testing_spider_chart(input$spider_journals, input$spider_output)
     })
 
     output$spider_percentile <- renderPlotly({

@@ -5,58 +5,10 @@ library(plotly)
 library(dplyr)
 library(ggplot2)
 
-library(rgeos)
-library(rworldmap)
-
 source("load_data.R")
 
 
-
-testing_spider_chart <- function(journals){
-    spider_data <- merge(x=alt_simp, y=jd, by.x="print_issn", by.y="issn1")
-    data <- spider_data
-    measures <- c('Impact Factor', 'SJR', 'Altmetric', 'Readers', 'Citations', 'Impact Factor')
-    fig <- plot_ly(
-        type = 'scatterpolar',
-        fill = 'toself'
-    )
-
-    #bwl = c('C', 'A+'),
-    #vwl = c('C', 'A+'),
-    maxmin = data.frame(
-                    if_ = c(0, 5),
-                    sjr = c(1, 15),
-                    Altmetric = c(500, 10000),
-                    Readers = c(3000, 250000),
-                    Citations = c(100, 2000)
-                )
-
-    for (journal in journals){
-        journal_data <- as.character(data[data$journal_name.x == journal, c('sjr','if_','cites','altmetric_score','instances')])
-        expanded <- c(journal_data, journal_data[1])
-        fig <- fig %>%
-            add_trace(
-                r = expanded,
-                theta = measures,
-                name = journal
-            )
-    }
-
-    fig <- fig %>%
-    layout(
-        polar = list(
-            radialaxis = list(
-                visible = T,
-                range = maxmin,
-                type="log"
-            )
-        )
-    )
-
-    return(fig)
-}
-
-replace_percent <- function(row, order, percentile){
+replace_with_percent <- function(row, order, percentile){
     out = list()
     for (i in 1:length(row)){
         value <- ecdf(percentile[order[i], "min"]:percentile[order[i], "max"])(row[i])
@@ -65,25 +17,14 @@ replace_percent <- function(row, order, percentile){
     return(out)
 }
 
-testing_spider_chart_percentiles <- function(journals){
+testing_spider_chart <- function(journals, type){
     spider_data <- merge(x=alt_simp, y=jd, by.x="print_issn", by.y="issn1")
-
     data <- spider_data
-
     # Limit columns to those used
     keep <- c('journal_name.x', 'sjr','if_','cites','altmetric_score','instances')
     data <- subset(data, select = keep)
 
-    #print(data)
-    min <- min(data$if_)
-    max <- max(data$if_)
-    percentile <- ecdf(min:max)
-
     measures <- c('Impact Factor', 'SJR', 'Altmetric', 'Readers', 'Citations', 'Impact Factor')
-    fig <- plot_ly(
-        type = 'scatterpolar',
-        fill = 'toself'
-    )
 
     percent <- data.frame(measure = character(0), min=numeric(0), max=numeric(0), p_min=numeric(0), p_max=numeric(0), stringsAsFactors=FALSE)
     for (i in 2:ncol(data)){
@@ -103,22 +44,20 @@ testing_spider_chart_percentiles <- function(journals){
     percentile <- percent[-1]
     row.names(percentile) <- percent$measure
 
-    #bwl = c('C', 'A+'),
-    #vwl = c('C', 'A+'),
-    maxmin = data.frame(
-                    if_ = c(percentile["if_", "p_min"], 1),
-                    sjr = c(percentile["sjr", "p_min"], 1),
-                    Altmetric = c(percentile["altmetric_score", "p_min"], 1),
-                    Readers = c(percentile["instances", "p_min"], 1),
-                    Citations = c(percentile["cites", "p_min"], 1)
-                )
+    fig <- plot_ly(
+        type = 'scatterpolar',
+        fill = 'toself'
+    )
 
     order <- c('sjr','if_','cites','altmetric_score','instances')
     for (journal in journals){
-        journal_data <- as.character(data[data$journal_name.x == journal, c('sjr','if_','cites','altmetric_score','instances')])
-        d <- replace_percent(journal_data, order, percentile)
-
-        expanded <- c(d, d[1])
+        journal_data <- as.character(data[data$journal_name.x == journal, order])
+        if (type == 'Totals'){
+            expanded <- c(journal_data, journal_data[1])
+        } else {
+            d <- replace_with_percent(journal_data, order, percentile)
+            expanded <- c(d, d[1])
+        }
         fig <- fig %>%
             add_trace(
                 r = expanded,
@@ -127,12 +66,18 @@ testing_spider_chart_percentiles <- function(journals){
             )
     }
 
+     if (type == 'Totals'){
+         scale_type = "log"
+     } else {
+         scale_type = ""
+     }
+
     fig <- fig %>%
     layout(
         polar = list(
             radialaxis = list(
                 visible = T,
-                range = maxmin
+                type=scale_type
             )
         )
     )

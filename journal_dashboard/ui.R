@@ -154,6 +154,11 @@ body <- dashboardBody(
                     multiple = T,
                     options=list(`max-options` = 3)
                 ),
+                radioGroupButtons(
+                    inputId = "spider_output", label = "Output Type:",
+                    choices = c("Totals", "Percentiles"),
+                    status = "primary"
+                ),
                 h2("Spider Chart (total values)[logarithmic scaling]"),
                 plotlyOutput('spider'),
                 h2("Spider Chart (percentiles)"),
