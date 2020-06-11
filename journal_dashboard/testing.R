@@ -133,17 +133,20 @@ testing_journal_comp_lollipop <- function(journal_1, journal_2, categories){
     # https://www.r-graph-gallery.com/303-lollipop-plot-with-2-values.html
     data <- merge(x=alt_simp, y=jd, by.x="print_issn", by.y="issn1")
     data <- data[data$journal_name.y %in% list(journal_1, journal_2), ] # limit to selected journals
+    data[is.na(data)] <- 0
 
     new_data <- data.frame(
         x = categories,
-        journal1 = as.numeric(unname(data[data$journal_name.y == journal_1, categories])),
-        journal2 = as.numeric(unname(data[data$journal_name.y == journal_2, categories]))
+        value1 = as.numeric(unname(data[data$journal_name.y == journal_1, categories])),
+        value2 = as.numeric(unname(data[data$journal_name.y == journal_2, categories])),
+        journal1 = journal_1,
+        journal2 = journal_2
     )
 
     fig <- ggplot(new_data) +
-        geom_segment( aes(x=x, xend=x, y=journal1, yend=journal2), color="grey") +
-        geom_point( aes(x=x, y=journal1), color=rgb(0.2,0.7,0.1,0.5), size=3 ) +
-        geom_point( aes(x=x, y=journal2), color=rgb(0.7,0.2,0.1,0.5), size=3 ) +
+        geom_segment( aes(x=x, xend=x, y=value1, yend=value2), color="grey") +
+        geom_point( aes(x=x, y=value1), color=rgb(0.2,0.7,0.1,0.5), size=3 ) +
+        geom_point( aes(x=x, y=value2), color=rgb(0.7,0.2,0.1,0.5), size=3 ) +
         coord_flip()+
         theme(
             legend.position = "top",
