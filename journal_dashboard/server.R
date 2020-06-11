@@ -99,6 +99,10 @@ function(input, output, session){
         testing_spider_chart(input$spider_journals)
     })
 
+    output$spider_percentile <- renderPlotly({
+        testing_spider_chart_percentiles(input$spider_journals)
+    })
+
     output$treemap_readers_status <- renderPlotly({
         testing_treemap_reader_status(input$treemap_readers_status_journals)
     })

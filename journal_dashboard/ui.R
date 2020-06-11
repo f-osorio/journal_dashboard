@@ -147,14 +147,17 @@ body <- dashboardBody(
         tabItem(tabName = "testing",
             fluidRow(
                 h1("Testing"),
-                h2("Spider Chart (Impact Factor, Altmetric score, Mendeley readers, SJR, Handelsblatt ranking, citations)[logarithmic scaling]"),
+                h2("Spider Chart"),
                 pickerInput("spider_journals",
                     label = "Select Journals",
                     choices = c("None"),
                     multiple = T,
                     options=list(`max-options` = 3)
                 ),
+                h2("Spider Chart (total values)[logarithmic scaling]"),
                 plotlyOutput('spider'),
+                h2("Spider Chart (percentiles)"),
+                plotlyOutput('spider_percentile'),
                 h2('Hierarchical Data'),
                 h3('Journal Reader Status (tree map)'),
                 pickerInput("treemap_readers_status_journals",
