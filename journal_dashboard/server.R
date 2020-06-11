@@ -66,11 +66,11 @@ function(input, output, session){
 
     # Section Figures
     output$map <- renderPlotly({
-        mendely_map_basic()
+        mendeley_map_basic()
     })
 
     output$map_comp <- renderPlotly({
-        mendely_map_comp(input$map_comp_select)
+        mendeley_map_comp(input$map_comp_select)
     })
 
     output$status <- renderPlotly({
@@ -89,6 +89,10 @@ function(input, output, session){
     available <- unique(merged$publisher)
     updatePickerInput(session, "treemap_readers_status_journals", choices=available, selected=list(available[1], available[2]))
 
+    comp_data <- merge(x=alt_simp, y=jd, by.x="print_issn", by.y="issn1")
+    avialable_journals = unique(comp_data$journal_name.y)
+    updatePickerInput(session, "journal_comp_1", choices=avialable_journals, selected=list(avialable_journals[1]))
+    updatePickerInput(session, "journal_comp_2", choices=avialable_journals, selected=list(avialable_journals[2]))
 
     # Section Figures
     output$spider <- renderPlotly({
@@ -98,17 +102,25 @@ function(input, output, session){
     output$treemap_readers_status <- renderPlotly({
         testing_treemap_reader_status(input$treemap_readers_status_journals)
     })
-    
+
+    output$journal_comp_chart <- renderPlotly({
+        testing_journal_comp_chart(input$journal_comp_1, input$journal_comp_2, input$categories)
+    })
+
+    output$journal_comp_lollipop <- renderPlotly({
+        testing_journal_comp_lollipop(input$journal_comp_1, input$journal_comp_2, input$categories)
+    })
+
     ##########################
     #       Spider_chart     #
     ##########################
-    spider_data <- spider_chart_data 
+    spider_data <- spider_chart_data
     journal_list = unique(spider_data$jornal_name)
     updatePickerInput(session, "Jornals_for_spider_chart", choices=journal_list, selected=list(journal_list[2], journal_list[3]))
-    
+
     output$spider_chart <- renderPlotly({
       spider_chart(input$Jornals_for_spider_chart)
     })
-    
-    
+
+
 }

@@ -59,8 +59,8 @@ body <- dashboardBody(
                                         "Patent" = "patent", "Weibo" = "weibo", "linkedIn" = "linkedIn", "Reddit" = "reddit",
                                         "Pinterest" = "pinterest", "F1000" = "f1000", "QA" = "qa", "Videos" = "videos"
                                     ),
-                                    selected = list("news", "blog", "facebook", "wikipedia", "google", "syllabi", "policy", "peer_review"),
-                                    options = list(`actions-box` = TRUE),
+                                    selected = list("news", "blog", "google","policy", "peer_review"),
+                                    options = list(`actions-box` = TRUE, `max-options` = 5),
                                     multiple = T
                 ),
                 plotlyOutput('pie'),
@@ -162,7 +162,32 @@ body <- dashboardBody(
                     choices = c("None"),
                     multiple = T
                 ),
-                plotlyOutput('treemap_readers_status')
+                plotlyOutput('treemap_readers_status'),
+                br(),
+                h2("Compare Journals"),
+                pickerInput('journal_comp_1',
+                            label = "Journal 1",
+                            choices = c("None")
+                ),
+                pickerInput('journal_comp_2',
+                            label = "Journal 2",
+                            choices = c("None")
+                ),
+                pickerInput('categories',
+                            label = "",
+                            choices = list('Altmetric Score'='altmetric_score', 'Blog'='blog',
+                                           'Policy'='policy', 'Twitter'='twitter',
+                                           'Facebook'='facebook', 'Impact Factor'='if_',
+                                           '5 Year IF'='if_5','H-Index'='h_index',
+                                           'Publications'='docs_published','Citations'='cites',
+                                           'Journal Quality'='jourqual', 'News'='news'),
+                            selected = list("cites", "blog", "if_"),
+                            options = list(`actions-box` = TRUE),
+                            multiple = T
+                ),
+                plotlyOutput('journal_comp_chart'),
+                br(),
+                plotlyOutput('journal_comp_lollipop')
             )
         ),
         tabItem(tabName = "spider_chart",
@@ -175,7 +200,7 @@ body <- dashboardBody(
                                      options=list(`max-options` = 3)
                   ),
                   plotlyOutput('spider_chart')
-                  
+
                 )
         )
     )

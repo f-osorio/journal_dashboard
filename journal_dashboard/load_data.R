@@ -1,16 +1,19 @@
 #############################################
 # Prepare the data to be used in the charts #
 #############################################
+# Altmetrics
 alt <- read.csv('../data/cleaned_altmetrics.csv', header=TRUE, sep=';', stringsAsFactors = FALSE)
 alt_simp <- read.csv('../data/simplified_alt.csv', header=TRUE, sep=';', stringsAsFactors = FALSE)
 
+# Spider Chart
 spider_chart_data <- read.csv2('../data/csv_tableau/spider_chart.csv', header=TRUE, sep=';',  stringsAsFactors = FALSE)
 
+# Mendeley
 mend_geo <- read.csv('../data/mendeley_country.csv', header=TRUE, sep=';', stringsAsFactors = FALSE)
 mend_status <- read.csv('../data/mendeley_status.csv', header=TRUE, sep=';', stringsAsFactors = FALSE)
 mend_doi <- read.csv('../data/mendeley_doi.csv', header=TRUE, sep=';', stringsAsFactors = FALSE)
 
-
+# Bibliometrics
 jd <- read.csv('../data/biblio_data.csv', header=FALSE, sep=';', stringsAsFactors = FALSE)
 colnames(jd) <- c('handle', 'year', 'cites', 'if_', 'if_5', 'docs_published', 'h_index', 'type', 'issn1', 'issn2', 'type2', 'year3',
                   'scimago_id', 'sjr', 'type4', 'year5', 'jourqual', 'type6', 'year7', 'bwl', 'type8', 'year9', 'vwl', 'journal_name')
