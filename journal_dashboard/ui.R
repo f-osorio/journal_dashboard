@@ -103,7 +103,7 @@ body <- dashboardBody(
                 ),
                 htmlOutput('journ_summary'),
                 h2("Documents Published vs. Total Citations"),
-                pickerInput('pub_cites_pointer', 'Select Journals to Highlight',
+                pickerInput('pub_cites_pointer', 'Select Journal to Highlight',
                             choices = c("None"),
                     options = list(`actions-box` = TRUE, `max-options` = 1),
                     multiple = T

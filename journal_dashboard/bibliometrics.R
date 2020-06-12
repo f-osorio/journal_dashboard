@@ -7,6 +7,14 @@ library(dplyr)
 source("load_data.R")
 
 
+log_loc <- function(value){
+    if (value == 0){
+        return(0)
+    } else {
+        return(log10(value))
+    }
+}
+
 bibliometrics_table <- function(target_journal){
     data <- jd[jd$journal_name == target_journal, ]
     fig <- HTML(paste("<table>
@@ -107,8 +115,8 @@ bibliometrics_published_v_cited <- function(highlight){
     # need to be able to apply scaling to the annotation
     if (length(highlight) > 0){
         a <- list(
-            x = log10(target$docs_published),
-            y = log10(target$cites),
+            x = log_loc(target$docs_published),
+            y = log_loc(target$cites),
             text = target$journal_name,
             xref = "x",
             yref = "y",
@@ -120,13 +128,11 @@ bibliometrics_published_v_cited <- function(highlight){
                         family = 'sans serif',
                         size = 22)
         )
+
         fig <- layout(fig,
             annotations = a,
-            #xaxis=list(title="Documented Published"),
-            #yaxis=list(title="Citations")
             xaxis=list(type="log", title="Documented Published"),
             yaxis=list(type="log", title="Citations")
-
         )
     } else {
         fig <- layout(fig,
@@ -134,7 +140,6 @@ bibliometrics_published_v_cited <- function(highlight){
             yaxis=list(type="log", title="Citations")
         )
     }
-
 
     return(fig)
 }
