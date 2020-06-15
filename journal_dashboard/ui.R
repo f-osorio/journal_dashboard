@@ -170,6 +170,7 @@ body <- dashboardBody(
                     status = "primary"
                 ),
                 plotlyOutput('spider'),
+                br(),
                 h2('Hierarchical Data'),
                 h3('Journal Reader Status (tree map)'),
                 pickerInput("treemap_readers_status_journals",
@@ -202,7 +203,10 @@ body <- dashboardBody(
                 ),
                 plotlyOutput('journal_comp_chart'),
                 br(),
-                plotlyOutput('journal_comp_lollipop')
+                plotlyOutput('journal_comp_lollipop'),
+                br(),
+                h2('Readers by Discipline'),
+                plotlyOutput('readers_by_discipline')
             )
         ),
         tabItem(tabName = "spider_chart",

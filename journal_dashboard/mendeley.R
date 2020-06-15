@@ -126,7 +126,6 @@ mendeley_map_comp <- function(selected){
 }
 
 mendeley_reader_status <- function(){
-    combined <- merge(x = mend_status, y = mend_doi, by.x = 'id_doi', by.y = 'id')
     status_sum <- mend_status %>%
         group_by(status) %>%
             summarize(count=sum(count))

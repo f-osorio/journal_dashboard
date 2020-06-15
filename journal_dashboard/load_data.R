@@ -12,6 +12,7 @@ spider_chart_data <- read.csv2('../data/csv_tableau/spider_chart.csv', header=TR
 mend_geo <- read.csv('../data/mendeley_country.csv', header=TRUE, sep=';', stringsAsFactors = FALSE)
 mend_status <- read.csv('../data/mendeley_status.csv', header=TRUE, sep=';', stringsAsFactors = FALSE)
 mend_doi <- read.csv('../data/mendeley_doi.csv', header=TRUE, sep=';', stringsAsFactors = FALSE)
+mend_disc <- read.csv('../data/mendeley_discipline.csv', header=TRUE, sep=';', stringsAsFactors = FALSE)
 
 # Bibliometrics
 jd <- read.csv('../data/biblio_data.csv', header=FALSE, sep=';', stringsAsFactors = FALSE)
