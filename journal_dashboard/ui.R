@@ -164,6 +164,11 @@ body <- dashboardBody(
                     choices = c("Totals", "Percentiles"),
                     status = "primary"
                 ),
+                radioGroupButtons(
+                    inputId = "spider_average", label = "Show Average:",
+                    choices = c("True", "False"),
+                    status = "primary"
+                ),
                 plotlyOutput('spider'),
                 h2('Hierarchical Data'),
                 h3('Journal Reader Status (tree map)'),

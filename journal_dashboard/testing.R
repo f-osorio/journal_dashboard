@@ -9,6 +9,10 @@ source("load_data.R")
 
 
 replace_with_percent <- function(row, order, percentile){
+    print('###############')
+    print(row)
+    print(order)
+    print(percentile)
     out = list()
     for (i in 1:length(row)){
         value <- ecdf(percentile[order[i], "min"]:percentile[order[i], "max"])(row[i])
@@ -17,7 +21,7 @@ replace_with_percent <- function(row, order, percentile){
     return(out)
 }
 
-testing_spider_chart <- function(journals, type){
+testing_spider_chart <- function(journals, type, show_average){
     spider_data <- merge(x=alt_simp, y=jd, by.x="print_issn", by.y="issn1")
     data <- spider_data
     # Limit columns to those used
@@ -40,16 +44,44 @@ testing_spider_chart <- function(journals, type){
         percent[row + 1, 4] = signif(p_min, 4)
         percent[row + 1, 5] = p_max
     }
+
+    # Get the averages
+    avg <- c(mean(data$sjr), mean(data$if_), mean(data$cites), mean(data$altmetric_score), mean(data$instances))
+
+
     # make first column the index
     percentile <- percent[-1]
     row.names(percentile) <- percent$measure
 
+    # Start Plot
     fig <- plot_ly(
         type = 'scatterpolar',
         fill = 'toself'
     )
 
     order <- c('sjr','if_','cites','altmetric_score','instances')
+    if (show_average == 'True'){
+        if (type == 'Totals'){
+            avg <- c(avg, avg[1])
+        } else {
+            avg <- replace_with_percent(avg, order, percentile)
+            avg <- c(avg, avg[1])
+        }
+        fig <- fig %>%
+            add_trace(
+                r = avg,
+                theta = measures,
+                name = "Average",
+                fillcolor = 'rgba(177, 177, 177, .5)',
+                marker = list(
+                    color = '#808080'
+                ),
+                line = list(
+                    color = '#808080'
+                )
+            )
+    }
+
     for (journal in journals){
         journal_data <- as.character(data[data$journal_name.x == journal, order])
         if (type == 'Totals'){
@@ -65,6 +97,7 @@ testing_spider_chart <- function(journals, type){
                 name = journal
             )
     }
+
 
      if (type == 'Totals'){
          scale_type = "log"
