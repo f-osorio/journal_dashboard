@@ -31,7 +31,8 @@ q = "SELECT COUNT(alt.journal_name) as count, alt.journal_name, geo.code, geo.co
                 ON geo.id_doi = doi.id
             JOIN alt_simp as alt
                 ON alt.print_issn = doi.issn
-            GROUP BY alt.journal_name, geo.code, geo.country"
+            GROUP BY alt.journal_name, geo.code, geo.country
+            ORDER BY count desc"
 
 mend_map_comp <- query(db, q)
 

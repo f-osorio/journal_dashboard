@@ -132,14 +132,14 @@ mendeley_map_comp <- function(selected){
 }
 
 mendeley_map_comp_circles <- function(selected){
-    data <- mend_map_comp
-
     # Find center long/lat for countries
     wmap <- getMap(resolution="high")
     # get centroids
     centroids <- gCentroid(wmap, byid=TRUE)
     # get a data.frame with centroids
     coords <- as.data.frame(centroids)
+
+    data <- mend_map_comp
 
     # Add center locations to data
     data[,'x'] <- NA
@@ -166,7 +166,7 @@ mendeley_map_comp_circles <- function(selected){
     # aggregate data for each journal, country
     data <- data %>%
         group_by(journal_name, country, x, y) %>%     # create the groups
-        summarise(Value = sum(count))
+        summarise(Value = as.integer(sum(count)))
 
     # order data by Value so smaller circles appear ontop of larger ones
     data <- data[with(data, order(-Value)), ]
@@ -180,9 +180,13 @@ mendeley_map_comp_circles <- function(selected){
         coastlinecolor = toRGB("grey90"),
         showcountries = T
     )
+
     fig <- plot_geo(data, sizes = c(1, 2500) )
     fig <- fig %>% add_markers(
-        x = ~x, y = ~y, size=~Value, color=~Value,
+        x=~x,
+        y=~y,
+        size=~Value,
+        color=~Value,
         hoverinfo="text",
         hovertext=paste("Country: ", data$country,
                         "<br>Journal: ", data$journal_name,
@@ -190,7 +194,8 @@ mendeley_map_comp_circles <- function(selected){
                         "<br>X: ", data$x,
                         "<br>Y: ", data$y)
     )
-    fig <- fig %>% layout(title='Most Readers for Selected Journals', geo=g, autosize=T)
+
+    fig <- fig %>% layout(geo=g, autosize=T)
 
     return(fig)
 }
@@ -208,3 +213,4 @@ mendeley_reader_status <- function(){
 
     return(fig)
 }
+
