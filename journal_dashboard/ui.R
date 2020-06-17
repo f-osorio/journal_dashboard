@@ -130,7 +130,7 @@ body <- dashboardBody(
                 h2("Where?"),
                 plotlyOutput('map'),
                 br(),
-                h2("Country with Highest Menedeley Readership for Selected Journals that aren't the hightest for another journal in the selection"),
+                h2("Country with Highest Menedeley Readership for Selected Journals"),
                 pickerInput('map_comp_select', 'Mendeley Readers For Selected Journals', choices = c("The Review of Economic Studies", "The Quarterly Journal of Economics", "The Academy of Management Annals", "Strategic Management Journal", "Review of Economic Studies",
                                                                                                      "Quarterly Journal of Economics", "Management Science", "Journal of the European Economic Association", "Journal of the American Economic Association", "Journal of Political Economy",
                                                                                                      "Journal of Marketing Research (JMR)", "Journal of Marketing", "Journal of Labor Economics", "Journal of Health Economics", "Journal of Financial Economics",

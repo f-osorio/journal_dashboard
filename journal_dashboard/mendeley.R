@@ -163,27 +163,36 @@ mendeley_map_comp_circles <- function(selected){
     }
 
     data <- data[data$journal_name %in% selected, ]
+    # aggregate data for each journal, country
+    data <- data %>%
+        group_by(journal_name, country, x, y) %>%     # create the groups
+        summarise(Value = sum(count))
+
+    # order data by Value so smaller circles appear ontop of larger ones
+    data <- data[with(data, order(-Value)), ]
 
     g <- list(
         scope = 'world',
         projection = list(type = 'albers'),
         showland=T,
-        landcolor = toRGB("white")
+        landcolor = toRGB("white"),
+        countrycolor = "#c5c5c5",
+        coastlinecolor = toRGB("grey90"),
+        showcountries = T
     )
-    fig <- plot_ly(data, sizes = c(1, 2500) )
+    fig <- plot_geo(data, sizes = c(1, 2500) )
     fig <- fig %>% add_markers(
-        x = ~x, y = ~y, size=~count, color=~count,
+        x = ~x, y = ~y, size=~Value, color=~Value,
         hoverinfo="text",
         hovertext=paste("Country: ", data$country,
                         "<br>Journal: ", data$journal_name,
-                        "<br>Readers: ", data$count,
+                        "<br>Readers: ", data$Value,
                         "<br>X: ", data$x,
                         "<br>Y: ", data$y)
     )
     fig <- fig %>% layout(title='Most Readers for Selected Journals', geo=g, autosize=T)
 
     return(fig)
-
 }
 
 mendeley_reader_status <- function(){
