@@ -53,4 +53,12 @@ q = "SELECT alt.journal_name, status.status, sum(status.count) as total
 
 treemap_data <- query(db, q)
 
+q = "SELECT *
+      FROM alt_simp as alt
+      JOIN bibliometrics as bib
+        ON alt.print_issn = bib.issn1"
+
+
+journal_comp <- query(db, q)
+
 stop(db)

@@ -89,6 +89,13 @@ function(input, output, session){
     journal_list = unique(data$journal_name)
     updatePickerInput(session, "treemap_readers_status_journals", choices=journal_list, selected=list(journal_list[1], journal_list[2]))
 
+
+    comp_data <- journal_comp
+    available_journals = unique(comp_data$journal_name)
+    updatePickerInput(session, "journal_comp_1", choices=available_journals, selected=available_journals[1])
+    updatePickerInput(session, "journal_comp_2", choices=available_journals, selected=available_journals[2])
+
+
     output$spider <- renderPlotly({
         testing_spider_chart(input$spider_journals, input$spider_output, input$spider_average)
     })
@@ -97,4 +104,11 @@ function(input, output, session){
         testing_treemap_reader_status(input$treemap_readers_status_journals)
     })
 
+    output$journal_comp_chart <- renderPlotly({
+        testing_journal_comp_chart(input$journal_comp_1, input$journal_comp_2, input$categories)
+    })
+
+    output$journal_comp_lollipop <- renderPlotly({
+        testing_journal_comp_lollipop(input$journal_comp_1, input$journal_comp_2, input$categories)
+    })
 }

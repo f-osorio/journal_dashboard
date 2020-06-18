@@ -176,7 +176,31 @@ body <- dashboardBody(
                     choices = c("None"),
                     multiple = T
                 ),
-                plotlyOutput('treemap_readers_status')
+                plotlyOutput('treemap_readers_status'),
+                h2("Compare 2 Journals"),
+                pickerInput('journal_comp_1',
+                            label = "Journal 1",
+                            choices = c("None")
+                ),
+                pickerInput('journal_comp_2',
+                            label = "Journal 2",
+                            choices = c("None")
+                ),
+                pickerInput('categories',
+                            label="",
+                            choices= list('Altmetric Score'='altmetric_score', 'Blog'='blog',
+                                          'Policy'='policy', 'Twitter'='twitter',
+                                          'Facebook'='facebook', 'Impact Factor'='if_',
+                                          '5 Year IF'='if_5','H-Index'='h_index',
+                                          'Publications'='documents_published','Citations'='cites',
+                                          'Journal Quality'='journ_qual', 'News'='news'),
+                            selected = list("cites", "blog", "if_"),
+                            options = list('action-box' = TRUE),
+                            multiple = T
+                ),
+                plotlyOutput('journal_comp_chart'),
+                br(),
+                plotlyOutput('journal_comp_lollipop')
             )
         )
     )
