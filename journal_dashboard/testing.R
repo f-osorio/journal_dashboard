@@ -120,20 +120,32 @@ testing_spider_chart <- function(journals, type, show_average){
 # https://observablehq.com/@didoesdigital/2-june-2020-treemaps-dendrograms-sunbursts-circle-packing
 testing_treemap_reader_status <- function(selected){
     data <- treemap_data
+    data <- data[data$journal_name %in% selected, ]
+    data[,3] <- as.integer(data[,3])  # cast from int64
 
+    # Add rows for the journals to act as "parents"
     for (i in 1:length(selected)){
         s <- sum(data[data$journal_name == selected[i], 3])
-        data[nrow(data)+1, ] = list("", selected[i], s)
+        pos = nrow(data)+1
+        data[pos, 1] <- ""
+        data[pos, 2] <- selected[i]
+        data[pos, 3] <- s
     }
+
     data[['ids']] <- paste(data$journal_name, data$status, sep="")
+
+    labels <- data$status
+    parents <- data$journal_name
+    values <- data$total
+    ids <- data$ids
 
     fig <- plot_ly(
         type='treemap',
-        labels=data$status,
-        parents=data$journal_name,
-        values=data$total,
+        labels=labels,
+        parents=parents,
+        values=values,
         branchvalues="total",
-        ids=data$ids,
+        ids=ids,
         hovertemplate = paste("Journal: ", data$journal_name, "<br>Status: ", data$status, "<br>Total: ", data$total),
         pathbar=list(visible= TRUE)
     )
