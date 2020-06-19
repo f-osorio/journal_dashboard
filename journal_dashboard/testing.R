@@ -9,10 +9,6 @@ source("load_data.R")
 
 
 replace_with_percent <- function(row, order, percentile){
-    print('###############')
-    print(row)
-    print(order)
-    print(percentile)
     out = list()
     for (i in 1:length(row)){
         value <- ecdf(percentile[order[i], "min"]:percentile[order[i], "max"])(row[i])
@@ -28,7 +24,7 @@ testing_spider_chart <- function(journals, type, show_average){
     keep <- c('journal_name.x', 'sjr','if_','cites','altmetric_score','instances')
     data <- subset(data, select = keep)
 
-    measures <- c('Impact Factor', 'SJR', 'Altmetric', 'Readers', 'Citations', 'Impact Factor')
+    measures <- c('Impact Factor', 'SJR', 'Citations', 'Altmetric', 'Readers', 'Impact Factor')
 
     percent <- data.frame(measure = character(0), min=numeric(0), max=numeric(0), p_min=numeric(0), p_max=numeric(0), stringsAsFactors=FALSE)
     for (i in 2:ncol(data)){
@@ -46,8 +42,7 @@ testing_spider_chart <- function(journals, type, show_average){
     }
 
     # Get the averages
-    avg <- c(mean(data$sjr), mean(data$if_), mean(data$cites), mean(data$altmetric_score), mean(data$instances))
-
+    avg <- c(mean(data$if_), mean(data$sjr), mean(data$cites), mean(data$altmetric_score), mean(data$instances))
 
     # make first column the index
     percentile <- percent[-1]
@@ -59,7 +54,7 @@ testing_spider_chart <- function(journals, type, show_average){
         fill = 'toself'
     )
 
-    order <- c('sjr','if_','cites','altmetric_score','instances')
+    order <- c('if_','sjr','cites','altmetric_score','instances')
     if (show_average == 'True'){
         if (type == 'Totals'){
             avg <- c(avg, avg[1])
