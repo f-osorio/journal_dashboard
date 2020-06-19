@@ -19,11 +19,12 @@ replace_with_percent <- function(row, order, percentile){
 
 testing_spider_chart <- function(journals, type, show_average){
     data <- spider_data
+
     # Limit columns to those used
     keep <- c('journal_name', 'sjr','if_','cites','altmetric_score','mendeley')
     data <- subset(data, select = keep)
 
-    measures <- c('Impact Factor', 'SJR', 'Altmetric', 'Readers', 'Citations', 'Impact Factor')
+    measures <- c('Impact Factor', 'SJR', 'Citations', 'Altmetric', 'Readers', 'Impact Factor')
 
     percent <- data.frame(measure = character(0), min=numeric(0), max=numeric(0), p_min=numeric(0), p_max=numeric(0), stringsAsFactors=FALSE)
     for (i in 2:ncol(data)){
@@ -41,7 +42,7 @@ testing_spider_chart <- function(journals, type, show_average){
     }
 
     # Get the averages
-    avg <- c(mean(data$sjr), mean(data$if_), mean(data$cites), mean(data$altmetric_score), mean(data$mendeley))
+    avg <- c(mean(data$if_), mean(data$sjr), mean(data$cites), mean(data$altmetric_score), mean(data$mendeley))
 
     # make first column the index
     percentile <- percent[-1]
@@ -53,7 +54,7 @@ testing_spider_chart <- function(journals, type, show_average){
         fill = 'toself'
     )
 
-    order <- c('sjr','if_','cites','altmetric_score','mendeley')
+    order <- c('if_','sjr','cites','altmetric_score','mendeley')
     if (show_average == 'True'){
         if (type == 'Totals'){
             avg <- c(avg, avg[1])
