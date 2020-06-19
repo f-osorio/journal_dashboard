@@ -25,25 +25,21 @@ top_10_per_publications_cutoff <- quantile(jd$docs_published, prob=1-n/100)
 top_10_per_sjr_cutoff <- quantile(jd$sjr, prob=1-n/100)
 
 
-q = "SELECT COUNT(alt.journal_name) as count, alt.journal_name, geo.code, geo.country
-             FROM mendeley_country as geo
-             JOIN mendeley_doi as doi
-                ON geo.id_doi = doi.id
-            JOIN alt_simp as alt
-                ON alt.print_issn = doi.issn
-            GROUP BY alt.journal_name, geo.code, geo.country
-            ORDER BY count desc"
+mend_map_comp = "SELECT doi.id, geo.count, geo.country, geo.code, doi.publisher
+                 FROM mendeley_doi as doi
+                 JOIN mendeley_country as geo
+                     ON geo.id_doi = doi.id"
 
-mend_map_comp <- query(db, q)
+mend_map_comp <- query(db, mend_map_comp)
 
-q = "Select bib.journal_name, bib.issn1, bib.if_, bib.sjr, bib.cites, alt.altmetric_score, alt.mendeley
+spider_data = "Select bib.journal_name, bib.issn1, bib.if_, bib.sjr, bib.cites, alt.altmetric_score, alt.mendeley
          FROM bibliometrics as bib
          INNER JOIN alt_simp as alt
             ON bib.issn1 = alt.print_issn"
 
-spider_data <- query(db, q)
+spider_data <- query(db, spider_data)
 
-q = "SELECT alt.journal_name, status.status, sum(status.count) as total
+treemap_data = "SELECT alt.journal_name, status.status, sum(status.count) as total
          FROM mendeley_status as status
          JOIN mendeley_doi as doi
             ON status.id_doi = doi.id
@@ -51,14 +47,14 @@ q = "SELECT alt.journal_name, status.status, sum(status.count) as total
             ON alt.print_issn = doi.issn
         GROUP BY alt.journal_name, status.status"
 
-treemap_data <- query(db, q)
+treemap_data <- query(db, treemap_data)
 
-q = "SELECT *
+journal_comp = "SELECT *
       FROM alt_simp as alt
       JOIN bibliometrics as bib
         ON alt.print_issn = bib.issn1"
 
 
-journal_comp <- query(db, q)
+journal_comp <- query(db, journal_comp)
 
 stop(db)

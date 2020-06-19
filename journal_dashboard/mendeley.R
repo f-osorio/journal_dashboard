@@ -162,10 +162,10 @@ mendeley_map_comp_circles <- function(selected){
         data[data$country == data_name, "y"] <- y
     }
 
-    data <- data[data$journal_name %in% selected, ]
+    data <- data[data$publisher %in% selected, ]
     # aggregate data for each journal, country
     data <- data %>%
-        group_by(journal_name, country, x, y) %>%     # create the groups
+        group_by(publisher, country, x, y) %>%     # create the groups
         summarise(Value = as.integer(sum(count)))
 
     # order data by Value so smaller circles appear ontop of larger ones
@@ -189,10 +189,8 @@ mendeley_map_comp_circles <- function(selected){
         color=~Value,
         hoverinfo="text",
         hovertext=paste("Country: ", data$country,
-                        "<br>Journal: ", data$journal_name,
-                        "<br>Readers: ", data$Value,
-                        "<br>X: ", data$x,
-                        "<br>Y: ", data$y)
+                        "<br>Journal: ", data$publisher,
+                        "<br>Readers: ", data$Value)
     )
 
     fig <- fig %>% layout(geo=g, autosize=T)

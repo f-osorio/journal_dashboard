@@ -22,13 +22,11 @@ vline <- function(x = 0, color = "red") {
 }
 altmetrics_aggregate_barchart <- function(input){
     max <- aggregate(altmetric_score ~ journal_name, alt, max)
-    min <- aggregate(altmetric_score ~ journal_name, alt, min)
     mean <- aggregate(altmetric_score ~ journal_name, alt, mean)
     median <- aggregate(altmetric_score ~ journal_name, alt, median)
 
     data <- switch(input,
         "Maximum" = max,
-        "Minimum" = min,
         "Mean" = mean,
         "Median" = median
     )
@@ -51,7 +49,7 @@ altmetrics_aggregate_barchart <- function(input){
 }
 
 altmetrics_pie <- function(sources, journal){
-    summary <- setDT(alt)[, c(lapply(.SD[, c(11:28), with=FALSE], sum)), by=journal_name]
+    summary <- setDT(alt)[, c(lapply(.SD[, c(10:28), with=FALSE], sum)), by=journal_name]
     sub <- data.frame(subset(summary, journal_name == journal))
     flipped <- as.data.frame(t(sub))
     flipped <- setDT(flipped, keep.rownames = TRUE)[]

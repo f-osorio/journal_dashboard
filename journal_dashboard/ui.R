@@ -35,7 +35,7 @@ body <- dashboardBody(
                 h1("Altmetrics"),
                 selectInput("altVar",
                     label = "Select A Value to Display",
-                    choices = c('Maximum', 'Minimum', 'Mean', 'Median'),
+                    choices = c('Maximum', 'Mean', 'Median'),
                     selected = "Maximum"
                 ),
                 h2('Altmetric Score'),

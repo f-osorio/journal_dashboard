@@ -71,8 +71,7 @@ CREATE TABLE mendeley_doi (
   issn varchar(500) DEFAULT '',
   title varchar(1000) DEFAULT '',
   publisher varchar(200) DEFAULT '',
-  discipline varchar(350) DEFAULT '',
-  electronic varchar(150) DEFAULT ''
+  discipline varchar(350) DEFAULT ''
 );
 
 DROP TABLE IF EXISTS mendeley_doi_simp;
