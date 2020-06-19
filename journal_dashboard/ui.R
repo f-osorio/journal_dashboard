@@ -131,12 +131,7 @@ body <- dashboardBody(
                 plotlyOutput('map'),
                 br(),
                 h2("Country with Highest Menedeley Readership for Selected Journals"),
-                pickerInput('map_comp_select', 'Mendeley Readers For Selected Journals', choices = c("The Review of Economic Studies", "The Quarterly Journal of Economics", "The Academy of Management Annals", "Strategic Management Journal", "Review of Economic Studies",
-                                                                                                     "Quarterly Journal of Economics", "Management Science", "Journal of the European Economic Association", "Journal of the American Economic Association", "Journal of Political Economy",
-                                                                                                     "Journal of Marketing Research (JMR)", "Journal of Marketing", "Journal of Labor Economics", "Journal of Health Economics", "Journal of Financial Economics",
-                                                                                                     "Journal of Finance", "Journal of Economic Theory", "Journal of Econometrics", "Journal of Consumer Research", "Journal of Business Research",
-                                                                                                     "Journal of Accounting Research", "Journal of Accounting & Economics", "Information Systems Research", "Games & Economic Behavior", "European Economic Review",
-                                                                                                     "Economic Journal", "American Economic Review", "Administrative Science Quarterly", "Academy of Management Review", "Academy of Management Journal"),
+                pickerInput('map_comp_select', 'Mendeley Readers For Selected Journals', choices = c("None"),
                             selected = list("American Economic Review", "Strategic Management Journal", "The Academy of Management Annals"),
                             options = list(`actions-box` = TRUE),
                             multiple = T

@@ -61,7 +61,7 @@ function(input, output, session){
     #####################
     #      Mendeley     #
     #####################
-    available <- unique(mend_map_comp$journal_name)
+    available <- unique(mend_map_comp$publisher)
     updatePickerInput(session,
                       "map_comp_select",
                       choices=available,
