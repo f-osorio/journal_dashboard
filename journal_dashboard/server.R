@@ -111,4 +111,8 @@ function(input, output, session){
     output$journal_comp_lollipop <- renderPlotly({
         testing_journal_comp_lollipop(input$journal_comp_1, input$journal_comp_2, input$categories)
     })
+
+    output$readers_by_discipline <- renderPlotly({
+        testing_readers_by_discipline()
+    })
 }

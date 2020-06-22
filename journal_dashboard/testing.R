@@ -219,3 +219,22 @@ testing_journal_comp_lollipop <- function(journal_1, journal_2, categories){
 
     return(fig)
 }
+
+testing_readers_by_discipline <- function(){
+        status_sum <- mend_dis %>%
+        group_by(category) %>%
+        summarize(count=sum(count))
+
+    fig <- plot_ly(status_sum,
+                   x = ~category,
+                   y = ~count,
+                   type = 'bar'
+    )
+
+    fig <- fig %>% layout(
+        yaxis = list(title = 'Count', type="log"),
+        xaxis = list(title = 'Category')
+    )
+
+    return(fig)
+}

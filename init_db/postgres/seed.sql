@@ -104,7 +104,6 @@ CREATE TABLE mendeley_discipline (
   id serial PRIMARY KEY,
   id_doi int,
   category varchar(150) NOT NULL DEFAULT '',
-  discipline varchar(50) NOT NULL DEFAULT '',
   count int NOT NULL DEFAULT '0'
 );
 
