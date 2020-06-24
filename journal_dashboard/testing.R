@@ -17,14 +17,48 @@ replace_with_percent <- function(row, order, percentile){
     return(out)
 }
 
+
+library(hash)
+hash_table <- hash()
+hash_table[["A"]] <- 6
+hash_table[["B"]] <- 5
+hash_table[["C"]] <- 4
+hash_table[["D"]] <- 3
+hash_table[["E"]] <- 2
+hash_table[["F"]] <- 1
+
+
+replace_letter_grade <- function(value){
+    out <- 0
+    if (grepl('+', value, fixed=TRUE)){
+        out <- out + .5
+        value <- substr(value, 1, 1)
+    }
+    if (has.key(value, hash_table)){
+        out <- out + hash_table[[value]]
+    }
+
+    return(out)
+}
+
+
 testing_spider_chart <- function(journals, type, show_average){
     spider_data <- merge(x=alt_simp, y=jd, by.x="print_issn", by.y="issn1")
     data <- spider_data
+
     # Limit columns to those used
-    keep <- c('journal_name.x', 'sjr','if_','cites','altmetric_score','instances')
+    keep <- c('journal_name.x', 'sjr','if_','cites','altmetric_score','instances', 'bwl', 'vwl')
     data <- subset(data, select = keep)
 
-    measures <- c('Impact Factor', 'SJR', 'Citations', 'Altmetric', 'Readers', 'Impact Factor')
+    for (i in 1:nrow(data)){
+        data[i, 7] <- replace_letter_grade(data[i, 7])
+        data[i, 8] <- replace_letter_grade(data[i, 8])
+    }
+
+    data$vwl <- as.numeric(as.character(data$vwl))
+    data$bwl <- as.numeric(as.character(data$bwl))
+
+    measures <- c('Impact Factor', 'SJR', 'Citations', 'Altmetric', 'Readers', 'BWL', 'VWL', 'Impact Factor')
 
     percent <- data.frame(measure = character(0), min=numeric(0), max=numeric(0), p_min=numeric(0), p_max=numeric(0), stringsAsFactors=FALSE)
     for (i in 2:ncol(data)){
@@ -42,7 +76,8 @@ testing_spider_chart <- function(journals, type, show_average){
     }
 
     # Get the averages
-    avg <- c(mean(data$if_), mean(data$sjr), mean(data$cites), mean(data$altmetric_score), mean(data$instances))
+    avg <- c(mean(data$if_), mean(data$sjr), mean(data$cites), mean(data$altmetric_score), mean(data$instances), mean(data$bwl), mean(data$vwl))
+    print(avg)
 
     # make first column the index
     percentile <- percent[-1]
@@ -54,7 +89,7 @@ testing_spider_chart <- function(journals, type, show_average){
         fill = 'toself'
     )
 
-    order <- c('if_','sjr','cites','altmetric_score','instances')
+    order <- c('if_','sjr','cites','altmetric_score','instances', 'bwl', 'vwl')
     if (show_average == 'True'){
         if (type == 'Totals'){
             avg <- c(avg, avg[1])
