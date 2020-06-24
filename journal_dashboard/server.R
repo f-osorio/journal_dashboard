@@ -78,6 +78,10 @@ function(input, output, session){
         mendeley_reader_status()
     })
 
+    output$map_comp2 <- renderPlotly({
+        mendeley_map_comp2(input$map_comp_select)
+    })
+
     ##########################
     #       Testing          #
     ##########################

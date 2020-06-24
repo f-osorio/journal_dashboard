@@ -145,6 +145,8 @@ body <- dashboardBody(
                     multiple = T
                 ),
                 plotlyOutput('map_comp', height="300%"),
+                br(),
+                plotlyOutput('map_comp2'),
                 h2("Who?"),
                 plotlyOutput('status')
             )
