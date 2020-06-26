@@ -13,6 +13,7 @@ sidebar <- dashboardSidebar(
         menuItem("Bibliometrics", tabName = "biblio", icon = icon("book")),
         menuItem("Mendeley", tabName = "mendeley", icon = icon("chart-bar")),
         menuItem("Testing", tabName = "testing", icon = icon("vial")),
+        menuItem("Spider Chart", tabName = "spider_chart", icon = icon("vial")),
         menuItem("Open R-Studio", href="/rstudio", icon = icon("r-project"))
     )
 )
@@ -21,7 +22,7 @@ body <- dashboardBody(
     tags$script(HTML(
         "
         var url = window.location.href
-        var target = document.getElementsByTagName('a')[5];
+        var target = document.getElementsByTagName('a')[6];
         if (url.includes('shiny/journal_dashboard')){
             var new_url = url.replace('shiny/journal_dashboard', 'rstudio')
             target.setAttribute('href', new_url);
@@ -102,6 +103,11 @@ body <- dashboardBody(
                 ),
                 htmlOutput('journ_summary'),
                 h2("Documents Published vs. Total Citations"),
+                pickerInput('pub_cites_pointer', 'Select Journal to Highlight',
+                            choices = c("None"),
+                    options = list(`actions-box` = TRUE, `max-options` = 1),
+                    multiple = T
+                ),
                 plotlyOutput('pubVcite'),
 
                 h2("H-Index &"),
@@ -139,6 +145,8 @@ body <- dashboardBody(
                     multiple = T
                 ),
                 plotlyOutput('map_comp', height="300%"),
+                br(),
+                plotlyOutput('map_comp2'),
                 h2("Who?"),
                 plotlyOutput('status')
             )
@@ -146,14 +154,25 @@ body <- dashboardBody(
         tabItem(tabName = "testing",
             fluidRow(
                 h1("Testing"),
-                h2("Spider Chart (Impact Factor, Altmetric score, Mendeley readers, SJR, Handelsblatt ranking, citations)[logarithmic scaling]"),
+                h2("Spider Chart"),
                 pickerInput("spider_journals",
                     label = "Select Journals",
                     choices = c("None"),
                     multiple = T,
                     options=list(`max-options` = 3)
                 ),
+                radioGroupButtons(
+                    inputId = "spider_output", label = "Output Type:",
+                    choices = c("Totals", "Percentiles"),
+                    status = "primary"
+                ),
+                radioGroupButtons(
+                    inputId = "spider_average", label = "Show Average:",
+                    choices = c("True", "False"),
+                    status = "primary"
+                ),
                 plotlyOutput('spider'),
+                br(),
                 h2('Hierarchical Data'),
                 h3('Journal Reader Status (tree map)'),
                 pickerInput("treemap_readers_status_journals",
@@ -186,8 +205,24 @@ body <- dashboardBody(
                 ),
                 plotlyOutput('journal_comp_chart'),
                 br(),
-                plotlyOutput('journal_comp_lollipop')
+                plotlyOutput('journal_comp_lollipop'),
+                br(),
+                h2('Readers by Discipline'),
+                plotlyOutput('readers_by_discipline')
             )
+        ),
+        tabItem(tabName = "spider_chart",
+                fluidRow(
+                  h2("Spider Chart"),
+                  pickerInput("Jornals_for_spider_chart",
+                                     label = "Select Journals",
+                                     choices = c("None"),
+                                     multiple = T,
+                                     options=list(`max-options` = 3)
+                  ),
+                  plotlyOutput('spider_chart')
+
+                )
         )
     )
 )

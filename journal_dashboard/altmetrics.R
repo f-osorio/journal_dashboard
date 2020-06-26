@@ -25,7 +25,6 @@ altmetrics_aggregate_barchart <- function(input){
     mean <- aggregate(altmetric_score ~ journal_name, alt, mean)
     median <- aggregate(altmetric_score ~ journal_name, alt, median)
 
-
     data <- switch(input,
         "Maximum" = max,
         "Minimum" = min,

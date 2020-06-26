@@ -126,7 +126,6 @@ mendeley_map_comp <- function(selected){
 }
 
 mendeley_reader_status <- function(){
-    combined <- merge(x = mend_status, y = mend_doi, by.x = 'id_doi', by.y = 'id')
     status_sum <- mend_status %>%
         group_by(status) %>%
             summarize(count=sum(count))
@@ -136,6 +135,101 @@ mendeley_reader_status <- function(){
                     y = ~count,
                     type = 'bar'
     )
+
+    return(fig)
+}
+
+mendeley_map_comp2 <- function(selected){
+    data <- merge(x=mend_geo, y=mend_doi, by.x="id_doi", by.y="id")
+
+    # Combine rows with count for each journal/country combo
+    geo_sum <- data %>%
+        group_by(country, code, publisher) %>%
+            summarize(count=sum(count.x))
+    data <- geo_sum
+
+    # Get top 10 for each journal
+    datalist = list()
+    start <- 1
+    stop <- length(selected)
+    for (i in start:stop){
+        journal_row <- data[which(data$publisher == selected[i]), ]
+        top10 <- top_n(ungroup(journal_row), 10, count)
+        datalist[[i]] <- top10
+    }
+    big_data <- do.call(rbind, datalist)
+
+    df <- big_data %>%
+        group_by(country, code) %>%
+            filter(count == max(count)) # Limit a country to only its max
+
+    df2 <- aggregate(count~., data = big_data, max)
+
+    # Get top 1 for each journal
+    datalist = list()
+    start <- 1
+    stop <- length(selected)
+    for (i in start:stop){
+        journal_row <- df[which(df$publisher == selected[i]), ]
+        top1 <- top_n(ungroup(journal_row), 1, count)
+        datalist[[i]] <- top1
+    }
+    big_data <- do.call(rbind, datalist)
+
+    curr_countries <- big_data$country
+    all_countries <- data$country
+
+    start <- 1
+    stop <- nrow(big_data)
+    for (i in start:stop){
+        row <- big_data[i, ]
+        target <- row$publisher
+        country <- row$country
+
+        # if country is the highest listed country for target journal, do nothing
+        # otherwise update row in big_data to have the highest from df2
+
+        # max journal for country in df2
+        #temp <- top_n(df2[df2$journal_name == target, ], 1, count)
+        temp <- df2[df2$publisher == target, ]
+        max <- big_data[i, ]$count
+        for (j in 1:nrow(temp)){
+            print(temp[j,]$country)
+            print(temp[j,]$count)
+            if (country != temp[j, ]$country && !(temp[j, ]$country %in% curr_countries) && !is.na(big_data[i, ]$country)){
+                temp_count <- temp[j, ]$count
+                if ( (temp_count > max) && !(temp[j, ]$country %in% big_data$country) ){
+                    big_data[i, ]$code <- temp[j, ]$code
+                    big_data[i, ]$country <- temp[j, ]$country
+                    big_data[i, ]$publisher <- temp[j, ]$publisher
+                    big_data[i, ]$count <- temp[j, ]$count
+                    curr_countries[[length(curr_countries)]] <- temp[j, ]$country
+                    max <- temp_count
+                }
+            }
+        }
+    }
+
+    df <- big_data
+
+    g <- list(
+        scope = 'world',
+        projection = list(type = 'albers'),
+        showland=T,
+        landcolor = toRGB("white"),
+        countrycolor = "#c5c5c5",
+        coastlinecolor = toRGB("grey90"),
+        showcountries = T
+    )
+    fig <- plot_ly(df, z = df$count, type = 'choropleth', locations = df$code, showscale=F, text=df$publisher,
+                    hoverinfo="text",
+                    hovertext=paste("Country: ", df$country,
+                                    "<br>Journal: ", df$publisher,
+                                    "<br>Readers: ", df$count)
+                    )
+
+    fig <- fig %>%
+            layout(geo = g)
 
     return(fig)
 }

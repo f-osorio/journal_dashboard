@@ -7,6 +7,14 @@ library(dplyr)
 source("load_data.R")
 
 
+log_loc <- function(value){
+    if (value == 0){
+        return(0)
+    } else {
+        return(log10(value))
+    }
+}
+
 bibliometrics_table <- function(target_journal){
     data <- jd[jd$journal_name == target_journal, ]
     fig <- HTML(paste("<table>
@@ -81,30 +89,57 @@ bibliometrics_table <- function(target_journal){
     return(fig)
 }
 
-bibliometrics_published_v_cited <- function(){
+bibliometrics_published_v_cited <- function(highlight){
+    target <- jd[jd$journal_name == highlight, ]
+
     fig <- plot_ly(
         jd,
         type='scatter',
         mode='markers',
         marker=list(
-            color=~if_,
-            colorscale='Portland',
-            reversescale=F
-        ),
+                    color=~if_,
+                    colorscale='Portland',
+                    reversescale=F
+                ),
         x = ~docs_published,
         y = ~cites,
         text = ~paste(
                 journal_name,
                 '<br>Publications:', docs_published,
                 '<br>Citations:', cites,
-                '<br>Impact Factor: ', if_
+                '<br>Impact Factor: ', if_,
+                '<br>X: ', docs_published,
+                '<br>Y: ', cites
         )
     )
+    # need to be able to apply scaling to the annotation
+    if (length(highlight) > 0){
+        a <- list(
+            x = log_loc(target$docs_published),
+            y = log_loc(target$cites),
+            text = target$journal_name,
+            xref = "x",
+            yref = "y",
+            showarrow = TRUE,
+            arrowhead = 7,
+            ax = 20,
+            ay = -40,
+            font = list(color = '#264E86',
+                        family = 'sans serif',
+                        size = 22)
+        )
 
-    fig <- layout(fig,
-        xaxis=list(type="log", title="Documented Published"),
-        yaxis=list(type="log", title="Citations")
-    )
+        fig <- layout(fig,
+            annotations = a,
+            xaxis=list(type="log", title="Documented Published"),
+            yaxis=list(type="log", title="Citations")
+        )
+    } else {
+        fig <- layout(fig,
+            xaxis=list(type="log", title="Documented Published"),
+            yaxis=list(type="log", title="Citations")
+        )
+    }
 
     return(fig)
 }

@@ -12,6 +12,7 @@ source("altmetrics.R")
 source("bibliometrics.R")
 source("mendeley.R")
 source("testing.R")
+source("spider.R")
 
 
 function(input, output, session){
@@ -41,6 +42,7 @@ function(input, output, session){
     # Selection Updates
     journal_list = sort(unique(jd$journal_name))[-1]
     updateSelectInput(session, "journ_summary", choices=journal_list, selected=journal_list[1])
+    updatePickerInput(session, "pub_cites_pointer", choices=journal_list)
 
     # Section Figures
     output$journ_summary <- renderUI({
@@ -48,7 +50,7 @@ function(input, output, session){
     })
 
     output$pubVcite <- renderPlotly({
-        bibliometrics_published_v_cited()
+        bibliometrics_published_v_cited(input$pub_cites_pointer)
     })
 
     output$hIndexGroup <- renderPlotly({
@@ -76,6 +78,10 @@ function(input, output, session){
         mendeley_reader_status()
     })
 
+    output$map_comp2 <- renderPlotly({
+        mendeley_map_comp2(input$map_comp_select)
+    })
+
     ##########################
     #       Testing          #
     ##########################
@@ -95,7 +101,7 @@ function(input, output, session){
 
     # Section Figures
     output$spider <- renderPlotly({
-        testing_spider_chart(input$spider_journals)
+        testing_spider_chart(input$spider_journals, input$spider_output, input$spider_average)
     })
 
     output$treemap_readers_status <- renderPlotly({
@@ -109,5 +115,21 @@ function(input, output, session){
     output$journal_comp_lollipop <- renderPlotly({
         testing_journal_comp_lollipop(input$journal_comp_1, input$journal_comp_2, input$categories)
     })
+
+    output$readers_by_discipline <- renderPlotly({
+        testing_readers_by_discipline()
+    })
+
+    ##########################
+    #       Spider_chart     #
+    ##########################
+    spider_data <- spider_chart_data
+    journal_list = unique(spider_data$jornal_name)
+    updatePickerInput(session, "Jornals_for_spider_chart", choices=journal_list, selected=list(journal_list[2], journal_list[3]))
+
+    output$spider_chart <- renderPlotly({
+      spider_chart(input$Jornals_for_spider_chart)
+    })
+
 
 }
