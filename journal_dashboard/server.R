@@ -123,10 +123,22 @@ function(input, output, session){
     ##########################
     #       Spider_chart     #
     ##########################
-    spider_data <- spider_chart_data
-    journal_list = unique(spider_data$jornal_name)
-    updatePickerInput(session, "Jornals_for_spider_chart", choices=journal_list, selected=list(journal_list[2], journal_list[3]))
-
+    observe({
+      spider_data <- spider_chart_data 
+      choosedReaderCategory <-input$Reader_category
+      filtered_category_data <- spider_data %>% filter(spider_data$academic_status %in% choosedReaderCategory)
+      updatePickerInput(session, "Discipline_category", choices=unique(filtered_category_data$discipline), selected = unique(filtered_category_data$discipline)[1])
+    }) 
+    
+    observe({  
+      spider_data <- spider_chart_data
+      choosedDiscipline <- input$Discipline_category
+      choosedReaderCategory <-input$Reader_category
+      filtered_category_data <- spider_data %>% filter(spider_data$academic_status %in% choosedReaderCategory)
+      filtered_category_discipline_data <- filtered_category_data %>% filter(filtered_category_data$discipline %in% choosedDiscipline)
+      updatePickerInput(session, "Jornals_for_spider_chart", choices=filtered_category_discipline_data$jornal_name, selected = filtered_category_discipline_data$jornal_name[1])
+    })  
+    
     output$spider_chart <- renderPlotly({
       spider_chart(input$Jornals_for_spider_chart)
     })

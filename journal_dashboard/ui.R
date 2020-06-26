@@ -3,6 +3,8 @@ library(plotly)
 library(shinydashboard)
 library(shinyWidgets)
 
+source("load_data.R")
+
 header <- dashboardHeader(
     title = "Journal Metrics"
 )
@@ -214,14 +216,27 @@ body <- dashboardBody(
         tabItem(tabName = "spider_chart",
                 fluidRow(
                   h2("Spider Chart"),
+                  pickerInput("Reader_category",
+                              label = "Select reader category",
+                              choices = as.character(unique(spider_chart_data$academic_status)),
+                              selected=list(as.character(unique(spider_chart_data$academic_status))[2]),
+                              multiple = T
+                              
+                  ),
+                  pickerInput("Discipline_category",
+                              label = "Select discipline",
+                              choices = NULL,
+                              multiple = T
+                              
+                  ),
                   pickerInput("Jornals_for_spider_chart",
-                                     label = "Select Journals",
-                                     choices = c("None"),
-                                     multiple = T,
-                                     options=list(`max-options` = 3)
+                              label = "Select Journals",
+                              choices = NULL,
+                              multiple = T,
+                              options=list(`max-options` = 3)
                   ),
                   plotlyOutput('spider_chart')
-
+                  
                 )
         )
     )
