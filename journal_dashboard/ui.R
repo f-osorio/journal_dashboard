@@ -16,6 +16,7 @@ sidebar <- dashboardSidebar(
         menuItem("Mendeley", tabName = "mendeley", icon = icon("chart-bar")),
         menuItem("Testing", tabName = "testing", icon = icon("vial")),
         menuItem("Spider Chart", tabName = "spider_chart", icon = icon("vial")),
+        menuItem("Bubble Chart", tabName = "bubble_chart", icon = icon("vial")),
         menuItem("Open R-Studio", href="/rstudio", icon = icon("r-project"))
     )
 )
@@ -238,7 +239,36 @@ body <- dashboardBody(
                   plotlyOutput('spider_chart')
                   
                 )
+        ),
+        tabItem(tabName = "bubble_chart",
+                fluidRow(
+                  h2("Bubble Chart"),
+                  pickerInput("Reader_category_bubble",
+                              label = "Select reader category",
+                              choices = as.character(unique(spider_chart_data$academic_status)),
+                              selected = as.character(unique(spider_chart_data$academic_status)),
+                              multiple = T
+                              
+                  ),
+                  pickerInput("Discipline_category_bubble",
+                              label = "Select discipline",
+                              choices = NULL,
+                              multiple = T
+                              
+                  ),
+                  pickerInput("Jornals_for_bubble_chart",
+                              label = "Select Journals",
+                              choices = NULL,
+                              multiple = T
+                              
+                  ),
+                  plotlyOutput('bubble_chart')
+                  
+                )
         )
+        
+        
+        
     )
 )
 

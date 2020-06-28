@@ -13,6 +13,7 @@ source("bibliometrics.R")
 source("mendeley.R")
 source("testing.R")
 source("spider.R")
+source("bubble.R")
 
 
 function(input, output, session){
@@ -142,6 +143,33 @@ function(input, output, session){
     output$spider_chart <- renderPlotly({
       spider_chart(input$Jornals_for_spider_chart)
     })
+    
+    ##########################
+    #       Bubble_chart     #
+    ##########################
+    observe({
+      bubble_data <- tableau_data 
+      choosedReaderCategory <-input$Reader_category_bubble
+      filtered_category_data <- bubble_data %>% filter(bubble_data$status %in% choosedReaderCategory)
+      updatePickerInput(session, "Discipline_category_bubble", choices=unique(filtered_category_data$discipline), selected = unique(filtered_category_data$discipline))
+    }) 
+    
+    observe({  
+      bubble_data <- tableau_data 
+      choosedDiscipline <- input$Discipline_category_bubble
+      choosedReaderCategory <-input$Reader_category_bubble
+      filtered_category_data <- bubble_data %>% filter(bubble_data$status %in% choosedReaderCategory)
+      filtered_category_discipline_data <- filtered_category_data %>% filter(filtered_category_data$discipline %in% choosedDiscipline)
+      updatePickerInput(session, "Jornals_for_bubble_chart", choices=filtered_category_discipline_data$name, selected = filtered_category_discipline_data$name)
+    })  
+    
+    output$bubble_chart <- renderPlotly({
+      inputTest <-input$Jornals_for_bubble_chart
+      filtered_name_data <- tableau_data %>% filter(tableau_data$name %in% inputTest)
+      bubble_chart(input$Jornals_for_bubble_chart)
+    })
+    
+    
 
 
 }
