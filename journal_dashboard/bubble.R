@@ -7,7 +7,6 @@ library(dplyr)
 source("load_data.R")
 
 bubble_chart <- function(journals){
-  test <- journals
   bubble_chart <- tableau_data  
   filtered_name_data <- bubble_chart %>% filter(bubble_chart$name %in% journals)
   fig <- plot_ly(filtered_name_data, x = ~alt_score, y = ~IF, text = ~name, type = 'scatter', mode = 'markers', color = ~SJR, colors = 'Reds',

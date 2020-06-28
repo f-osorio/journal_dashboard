@@ -9,7 +9,7 @@ alt_simp <- read.csv('../data/simplified_alt.csv', header=TRUE, sep=';', strings
 spider_chart_data <- read.csv2('../data/csv_tableau/spider_chart.csv', header=TRUE, sep=';',  stringsAsFactors = FALSE)
 
 #Tableau
-tableau_data <- read.csv2('../data/csv_tableau/final_clean_agregated (zbw).csv', header=TRUE, sep=';',  stringsAsFactors = FALSE)
+tableau_data <- unique(read.csv2('../data/csv_tableau/final_clean_agregated (zbw).csv', header=TRUE, sep=';',  stringsAsFactors = FALSE))
 
 # Mendeley
 mend_geo <- read.csv('../data/mendeley_country.csv', header=TRUE, sep=';', stringsAsFactors = FALSE)
