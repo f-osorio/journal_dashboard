@@ -3,6 +3,8 @@ library(plotly)
 library(shinydashboard)
 library(shinyWidgets)
 
+source("load_data.R")
+
 header <- dashboardHeader(
     title = "Journal Metrics"
 )
@@ -14,6 +16,8 @@ sidebar <- dashboardSidebar(
         menuItem("Mendeley", tabName = "mendeley", icon = icon("chart-bar")),
         menuItem("Testing", tabName = "testing", icon = icon("vial")),
         menuItem("Spider Chart", tabName = "spider_chart", icon = icon("vial")),
+        menuItem("Bubble Chart", tabName = "bubble_chart", icon = icon("vial")),
+        menuItem("Horizontal Bar", tabName = "horizontal_bar", icon = icon("vial")),
         menuItem("Open R-Studio", href="/rstudio", icon = icon("r-project"))
     )
 )
@@ -214,16 +218,85 @@ body <- dashboardBody(
         tabItem(tabName = "spider_chart",
                 fluidRow(
                   h2("Spider Chart"),
+                  pickerInput("Reader_category",
+                              label = "Select reader category",
+                              choices = as.character(unique(spider_chart_data$academic_status)),
+                              selected=list(as.character(unique(spider_chart_data$academic_status))[2]),
+                              multiple = T
+                              
+                  ),
+                  pickerInput("Discipline_category",
+                              label = "Select discipline",
+                              choices = NULL,
+                              multiple = T
+                              
+                  ),
                   pickerInput("Jornals_for_spider_chart",
-                                     label = "Select Journals",
-                                     choices = c("None"),
-                                     multiple = T,
-                                     options=list(`max-options` = 3)
+                              label = "Select Journals",
+                              choices = NULL,
+                              multiple = T,
+                              options=list(`max-options` = 3)
                   ),
                   plotlyOutput('spider_chart')
+                  
+                )
+        ),
+        tabItem(tabName = "bubble_chart",
+                fluidRow(
+                  h2("Bubble Chart"),
+                  pickerInput("Reader_category_bubble",
+                              label = "Select reader category",
+                              choices = as.character(unique(tableau_data$status)),
+                              selected = as.character(unique(tableau_data$status)),
+                              multiple = T
+                              
+                  ),
+                  pickerInput("Discipline_category_bubble",
+                              label = "Select discipline",
+                              choices = NULL,
+                              multiple = T
+                              
+                  ),
+                  pickerInput("Jornals_for_bubble_chart",
+                              label = "Select Journals",
+                              choices = NULL,
+                              multiple = T
+                              
+                  ),
+                  plotlyOutput('bubble_chart')
+                  
+                )
+        ),
+        
+        tabItem(tabName = "horizontal_bar",
+                fluidRow(
+                  h2("Horizontal Bar"),
+                  pickerInput("Reader_category_horizontal",
+                              label = "Select reader category",
+                              choices = as.character(unique(tableau_data$status)),
+                              selected = as.character(unique(tableau_data$status)),
+                              multiple = T
+
+                  ),
+                  pickerInput("Discipline_category_horizontal",
+                              label = "Select discipline",
+                              choices = NULL,
+                              multiple = T
+
+                  ),
+                  pickerInput("Jornals_for_horizontal_bar",
+                              label = "Select Journals",
+                              choices = NULL,
+                              multiple = T
+
+                  ),
+                  plotlyOutput('horizontal_bar')
 
                 )
         )
+        
+        
+        
     )
 )
 
