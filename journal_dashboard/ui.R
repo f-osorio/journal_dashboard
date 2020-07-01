@@ -26,7 +26,7 @@ body <- dashboardBody(
     tags$script(HTML(
         "
         var url = window.location.href
-        var target = document.getElementsByTagName('a')[6];
+        var target = document.getElementsByTagName('a')[8];
         if (url.includes('shiny/journal_dashboard')){
             var new_url = url.replace('shiny/journal_dashboard', 'rstudio')
             target.setAttribute('href', new_url);
@@ -223,13 +223,13 @@ body <- dashboardBody(
                               choices = as.character(unique(spider_chart_data$academic_status)),
                               selected=list(as.character(unique(spider_chart_data$academic_status))[2]),
                               multiple = T
-                              
+
                   ),
                   pickerInput("Discipline_category",
                               label = "Select discipline",
                               choices = NULL,
                               multiple = T
-                              
+
                   ),
                   pickerInput("Jornals_for_spider_chart",
                               label = "Select Journals",
@@ -238,7 +238,7 @@ body <- dashboardBody(
                               options=list(`max-options` = 3)
                   ),
                   plotlyOutput('spider_chart')
-                  
+
                 )
         ),
         tabItem(tabName = "bubble_chart",
@@ -249,25 +249,25 @@ body <- dashboardBody(
                               choices = as.character(unique(tableau_data$status)),
                               selected = as.character(unique(tableau_data$status)),
                               multiple = T
-                              
+
                   ),
                   pickerInput("Discipline_category_bubble",
                               label = "Select discipline",
                               choices = NULL,
                               multiple = T
-                              
+
                   ),
                   pickerInput("Jornals_for_bubble_chart",
                               label = "Select Journals",
                               choices = NULL,
                               multiple = T
-                              
+
                   ),
                   plotlyOutput('bubble_chart')
-                  
+
                 )
         ),
-        
+
         tabItem(tabName = "horizontal_bar",
                 fluidRow(
                   h2("Horizontal Bar"),
@@ -294,9 +294,9 @@ body <- dashboardBody(
 
                 )
         )
-        
-        
-        
+
+
+
     )
 )
 
