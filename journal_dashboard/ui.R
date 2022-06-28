@@ -263,6 +263,11 @@ body <- dashboardBody(
                               multiple = T
 
                   ),
+                  radioGroupButtons(
+                    inputId = "show_journal_names", label = "Show Names:",
+                    choices = c("True", "False"),
+                    status = "primary"
+                  ),
                   plotlyOutput('bubble_chart')
 
                 )

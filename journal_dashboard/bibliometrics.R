@@ -131,7 +131,7 @@ bibliometrics_published_v_cited <- function(highlight){
 
         fig <- layout(fig,
             annotations = a,
-            xaxis=list(type="log", title="Documented Published"),
+            xaxis=list(type="log", title="Documents Published"),
             yaxis=list(type="log", title="Citations")
         )
     } else {
